@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   usuario.init({
+
     nombreusuario: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -33,7 +34,12 @@ module.exports = (sequelize, DataTypes) => {
       //     msg: "El contraseña debe tener como mínimo 6 caracteres"
       //   }
       // }
+    },
+    estado: {
+      type: Sequelize.STRING,
+      defaultValue: "espera",
     }
+
   }, {
     sequelize,
     modelName: 'usuario',
