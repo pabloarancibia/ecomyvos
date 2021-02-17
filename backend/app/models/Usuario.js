@@ -1,5 +1,6 @@
 'use strict';
 const { Model } = require('sequelize');
+const Persona = require('./Persona');
 
 module.exports = (sequelize, DataTypes) => {
   class usuario extends Model {
@@ -9,10 +10,18 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      // Usuario pertenece a Persona
+      usuario.belongsTo(models.Persona)
+
     }
   };
   usuario.init({
+    id: {
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
+      type: Sequelize.INTEGER
+    },
     nombreusuario: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -27,16 +36,22 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      // validate: {
-      //   len: {
-      //     args: [6, 255],
-      //     msg: "El contraseña debe tener como mínimo 6 caracteres"
-      //   }
-      // }
+
+    },
+    createdAt: {
+      allowNull: false,
+      type: Sequelize.DATE
+    },
+    updatedAt: {
+      allowNull: false,
+      type: Sequelize.DATE
     }
   }, {
     sequelize,
     modelName: 'usuario',
   });
+
+
+
   return usuario;
 };
