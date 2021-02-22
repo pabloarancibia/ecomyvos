@@ -1,9 +1,11 @@
 /**
- * Configuracion rutas principales
+ * @description Configuracion rutas principales
  */
 
 const express = require("express");
 const router = express.Router();
+// Middlewares
+const verifySignup = require('./middlewares/verifySignup');
 
 // Controllers
 const AuthController = require('./controllers/AuthController');
@@ -15,7 +17,11 @@ router.get('/', function (req, res) {
 
 // Routes Login & Register
 router.post('/api/signin', AuthController.signIn);
-router.post('/api/signup', AuthController.signUp);
+router.post(
+    '/api/signup',
+    [verifySignup.checkDuplicateUsername],
+    AuthController.signUp
+);
 
 
 module.exports = router;

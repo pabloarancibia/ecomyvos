@@ -14,5 +14,11 @@ module.exports = {
 
   // Migraciones
   migrationStorage: "sequelize",
-  migrationStorageTableName: "migrations"
+  migrationStorageTableName: "migrations",
+
+  // singular tables in db
+  define: {
+    //prevent sequelize from pluralizing table names
+    freezeTableName: true
+  }
 }

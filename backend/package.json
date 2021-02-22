@@ -1,12 +1,12 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "backend Ecom y Vos",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon app/server.js"
   },
-  "author": "",
+  "author": "Pablo Arancibia",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.0.0",

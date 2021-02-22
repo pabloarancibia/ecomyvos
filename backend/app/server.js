@@ -27,4 +27,10 @@ app.listen(PORT, function (req, res) {
     sequelize.authenticate().then(() => {
         console.log('Coexión a BASE DE DATOS establecida')
     })
+    //Sync Database
+    // sequelize.sync({ force: true }).then(function () {
+    //     console.log('connected to database')
+    // }).catch(function (err) {
+    //     console.log(err)
+    // });
 });

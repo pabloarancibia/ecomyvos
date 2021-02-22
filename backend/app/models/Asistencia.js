@@ -1,7 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
+
 module.exports = (sequelize, DataTypes) => {
-    const Rol = sequelize.define('Rol', {
+    const Asistencia = sequelize.define('Asistencia', {
         // Model attributes are defined here
         id: {
             allowNull: false,
@@ -9,18 +10,12 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             type: Sequelize.INTEGER
         },
-        nombrerol: {
+        asistencia: {
             type: Sequelize.STRING,
-            allowNull: false,
-            unique: true,
+            defaultValue: "ausente"
         },
-        descripcion: {
+        observaciones: {
             type: Sequelize.STRING,
-        },
-        estado: {
-            type: Sequelize.STRING,
-            defaultValue: "activo"
-
         },
         createdAt: {
             allowNull: false,
@@ -36,11 +31,15 @@ module.exports = (sequelize, DataTypes) => {
     });
 
 
-    Rol.associate = function (models) {
-        // Rol pertenece a muchas Personas N:M
-        Rol.belongsToMany(models.Persona, { through: "PersonaRoles" });
+    Asistencia.associate = function (models) {
+        // Asistencia pertenece a Persona
+        Asistencia.belongsTo(models.Persona)
+        // Asistencia pertenece a Capacitacion
+        Asistencia.belongsTo(models.Capacitacion)
+
+
     };
 
 
-    return Rol;
+    return Asistencia;
 };

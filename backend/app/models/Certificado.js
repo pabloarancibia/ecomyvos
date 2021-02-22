@@ -1,7 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
+
 module.exports = (sequelize, DataTypes) => {
-    const Rol = sequelize.define('Rol', {
+    const Certificado = sequelize.define('Certificado', {
         // Model attributes are defined here
         id: {
             allowNull: false,
@@ -9,18 +10,16 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             type: Sequelize.INTEGER
         },
-        nombrerol: {
+        path: {
             type: Sequelize.STRING,
             allowNull: false,
-            unique: true,
-        },
-        descripcion: {
-            type: Sequelize.STRING,
         },
         estado: {
             type: Sequelize.STRING,
             defaultValue: "activo"
-
+        },
+        observaciones: {
+            type: Sequelize.STRING,
         },
         createdAt: {
             allowNull: false,
@@ -36,11 +35,15 @@ module.exports = (sequelize, DataTypes) => {
     });
 
 
-    Rol.associate = function (models) {
-        // Rol pertenece a muchas Personas N:M
-        Rol.belongsToMany(models.Persona, { through: "PersonaRoles" });
+    Certificado.associate = function (models) {
+        // Certificado pertenece a Persona
+        Certificado.belongsTo(models.Persona)
+        // Certificado pertenece a Capacitacion
+        Certificado.belongsTo(models.Capacitacion)
+
+
     };
 
 
-    return Rol;
+    return Certificado;
 };

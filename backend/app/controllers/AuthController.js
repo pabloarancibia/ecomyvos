@@ -1,4 +1,5 @@
-const { usuario } = require('../models/index');
+const { Usuario, Persona } = require('../models/index');
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authConfig = require('../../config/auth');
@@ -10,27 +11,27 @@ module.exports = {
         let { nombreusuario, password } = req.body;
 
         // Buscar usuario
-        usuario.findOne({
+        Usuario.findOne({
             where: {
                 nombreusuario: nombreusuario
             }
-        }).then(usuario => {
+        }).then(Usuario => {
 
-            if (!usuario) {
+            if (!Usuario) {
                 res.status(404).json({ msg: "Usuario no encontrado" });
             } else {
 
                 // Comparo contraseña
-                if (bcrypt.compareSync(password, usuario.password)) {
+                if (bcrypt.compareSync(password, Usuario.password)) {
 
                     // Creamos el token
-                    let token = jwt.sign({ usuario: usuario }, authConfig.secret, {
+                    let token = jwt.sign({ Usuario: Usuario }, authConfig.secret, {
                         expiresIn: authConfig.expires
                     });
 
                     // devuelvo el token
                     res.json({
-                        usuario: usuario,
+                        Usuario: Usuario,
                         token: token
                     })
 
@@ -50,30 +51,79 @@ module.exports = {
 
     // Registro
     signUp(req, res) {
+        /**
+         * @method
+         * @description Registrar un nuevo usuario
+         * Primero se deberá buscar si Persona existe.
+         * Si: Se guarda usuario a esa Persona.
+         * No: Se guarda Persona y luego Usuario.
+         */
 
-        // Encriptamos la contraseña
-        let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
+        // Busco Persona
+        Persona.findOrCreate({
+            where: {
+                cuil: req.body.cuil
+            },
+            defaults: {
+                cuil: req.body.cuil,
+                nombre: req.body.nombre,
+                apellido: req.body.apellido,
+                email: req.body.email,
+                genero: req.body.genero,
+                fechanacimiento: req.body.fechanacimiento,
+            }
+        }).then(function (result) {
+            var persona = result[0];
+            // Crear un usuario
+            // Encriptamos la contraseña
+            let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
+            Usuario.create({
+                nombreusuario: req.body.nombreusuario,
+                password: password,
+                PersonaId: persona.id
 
-        // Crear un usuario
-        usuario.create({
-            nombreusuario: req.body.nombreusuario,
-            password: password
-        }).then(usuario => {
+            }).then(Usuario => {
 
-            // Creamos el token
-            let token = jwt.sign({ usuario: usuario }, authConfig.secret, {
-                expiresIn: authConfig.expires
-            });
+                // Creamos el token
+                let token = jwt.sign({ Usuario: Usuario }, authConfig.secret, {
+                    expiresIn: authConfig.expires
+                });
 
-            // Devolvemos token
-            res.json({
-                usuario: usuario,
-                token: token
+                // Devolvemos token
+                res.json({
+                    Usuario: Usuario,
+                    token: token
+                });
+
+            }).catch(err => {
+                res.status(500).json(err);
             });
 
         }).catch(err => {
             res.status(500).json(err);
         });
+
+        // Crear un usuario
+        // Usuario.create({
+        //     nombreusuario: req.body.nombreusuario,
+        //     password: password,
+
+        // }).then(Usuario => {
+
+        // Creamos el token
+        // let token = jwt.sign({ Usuario: Usuario }, authConfig.secret, {
+        //     expiresIn: authConfig.expires
+        // });
+
+        // Devolvemos token
+        // res.json({
+        //     Usuario: Usuario,
+        //     token: token
+        // });
+
+        // }).catch(err => {
+        //     res.status(500).json(err);
+        // });
 
     }
 }

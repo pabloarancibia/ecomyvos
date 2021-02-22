@@ -1,9 +1,8 @@
 'use strict';
 const { Model } = require('sequelize');
-const Persona = require('./Persona');
 
 module.exports = (sequelize, DataTypes) => {
-  class usuario extends Model {
+  class Usuario extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,16 +10,22 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // Usuario pertenece a Persona
-      usuario.belongsTo(models.Persona)
+      // Usuario.belongsTo(models.Persona, {
+      //   foreignKey: {
+      //     as: 'persona',
+      //     foreignKey: 'persona_id',
+      //   }
+      // })
+      Usuario.belongsTo(models.Persona)
 
     }
   };
-  usuario.init({
+  Usuario.init({
     id: {
       allowNull: false,
       autoIncrement: true,
       primaryKey: true,
-      type: Sequelize.INTEGER
+      type: DataTypes.INTEGER
     },
     nombreusuario: {
       type: DataTypes.STRING,
@@ -29,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         len: {
           args: [4, 30],
-          msg: "El nombre de usuario debe ser entre 4 y 30 caracteres"
+          msg: "El nombre de Usuario debe ser entre 4 y 30 caracteres"
         }
       }
     },
@@ -40,18 +45,19 @@ module.exports = (sequelize, DataTypes) => {
     },
     createdAt: {
       allowNull: false,
-      type: Sequelize.DATE
+      type: DataTypes.DATE
     },
     updatedAt: {
       allowNull: false,
-      type: Sequelize.DATE
-    }
+      type: DataTypes.DATE
+    },
+
   }, {
     sequelize,
-    modelName: 'usuario',
+    modelName: 'Usuario',
   });
 
 
 
-  return usuario;
+  return Usuario;
 };

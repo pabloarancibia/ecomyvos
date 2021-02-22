@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
-    const Rol = sequelize.define('Rol', {
+    const Telefono = sequelize.define('Telefono', {
         // Model attributes are defined here
         id: {
             allowNull: false,
@@ -9,10 +9,13 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true,
             type: Sequelize.INTEGER
         },
-        nombrerol: {
+
+        tipotel: {
             type: Sequelize.STRING,
+        },
+        numero: {
+            type: Sequelize.BIGINT,
             allowNull: false,
-            unique: true,
         },
         descripcion: {
             type: Sequelize.STRING,
@@ -36,11 +39,11 @@ module.exports = (sequelize, DataTypes) => {
     });
 
 
-    Rol.associate = function (models) {
-        // Rol pertenece a muchas Personas N:M
-        Rol.belongsToMany(models.Persona, { through: "PersonaRoles" });
+    Telefono.associate = function (models) {
+        // Telefono pertenece a Persona
+        Telefono.belongsTo(models.Persona);
     };
 
 
-    return Rol;
+    return Telefono;
 };
