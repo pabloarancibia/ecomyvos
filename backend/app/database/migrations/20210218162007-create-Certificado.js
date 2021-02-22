@@ -28,11 +28,11 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      persona_id: {
+      PersonaId: {
         type: Sequelize.INTEGER,
         references: { model: 'Persona', key: 'id' }
       },
-      capacitacion_id: {
+      CapacitacionId: {
         type: Sequelize.INTEGER,
         references: { model: 'Capacitacion', key: 'id' }
       },

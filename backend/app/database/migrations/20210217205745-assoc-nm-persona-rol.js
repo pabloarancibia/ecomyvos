@@ -15,11 +15,11 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      persona_id: {
+      PersonaId: {
         type: Sequelize.INTEGER,
         references: { model: 'Persona', key: 'id' }
       },
-      rol_id: {
+      RolId: {
         type: Sequelize.INTEGER,
         references: { model: 'Rol', key: 'id' }
       },

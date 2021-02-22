@@ -39,7 +39,7 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       },
-      persona_id: {
+      PersonaId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
