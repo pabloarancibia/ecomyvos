@@ -57,6 +57,8 @@ module.exports = {
          * Primero se deberá buscar si Persona existe.
          * Si: Se guarda usuario a esa Persona.
          * No: Se guarda Persona y luego Usuario.
+         * ** Previamente se verifica en middleware si
+         * el nombre de usuario ya existe
          */
 
         // Busco Persona
@@ -103,27 +105,7 @@ module.exports = {
             res.status(500).json(err);
         });
 
-        // Crear un usuario
-        // Usuario.create({
-        //     nombreusuario: req.body.nombreusuario,
-        //     password: password,
 
-        // }).then(Usuario => {
-
-        // Creamos el token
-        // let token = jwt.sign({ Usuario: Usuario }, authConfig.secret, {
-        //     expiresIn: authConfig.expires
-        // });
-
-        // Devolvemos token
-        // res.json({
-        //     Usuario: Usuario,
-        //     token: token
-        // });
-
-        // }).catch(err => {
-        //     res.status(500).json(err);
-        // });
 
     }
 }

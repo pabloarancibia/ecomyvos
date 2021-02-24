@@ -4,11 +4,20 @@
 
 const express = require("express");
 const router = express.Router();
+
 // Middlewares
 const verifySignup = require('./middlewares/verifySignup');
+const authJwt = require("./middlewares/authJwt");
+const verifyRol = require("./middlewares/verifyRol");
 
 // Controllers
-const AuthController = require('./controllers/AuthController');
+const AuthCtrl = require('./controllers/AuthController');
+const capacitacionCtrl = require('./controllers/capacitacionController');
+
+
+/**
+ * Routes
+ */
 
 // home
 router.get('/', function (req, res) {
@@ -16,12 +25,19 @@ router.get('/', function (req, res) {
 });
 
 // Routes Login & Register
-router.post('/api/signin', AuthController.signIn);
+router.post('/api/signin', AuthCtrl.signIn);
 router.post(
     '/api/signup',
     [verifySignup.checkDuplicateUsername],
-    AuthController.signUp
+    AuthCtrl.signUp
 );
+
+//Routes Capacitacion
+router.post(
+    '/api/crearcapacitacion',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin],
+    capacitacionCtrl.crearCapacitacion);
 
 
 module.exports = router;

@@ -34,9 +34,6 @@ module.exports = {
       horainicio: {
         type: Sequelize.DATE,
       },
-      horainicio: {
-        type: Sequelize.DATE,
-      },
       conectividad_up: {
         type: Sequelize.INTEGER,
       },

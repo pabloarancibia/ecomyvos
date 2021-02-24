@@ -3,11 +3,11 @@ const { Sequelize, DataTypes } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
     const PersonaCapacitaciones = sequelize.define('PersonaCapacitaciones', {
         // Model attributes are defined here
-        persona_id: {
+        PersonaId: {
             type: Sequelize.INTEGER,
 
         },
-        capacitacion_id: {
+        CapacitacionId: {
             type: Sequelize.INTEGER,
 
         }
@@ -19,11 +19,11 @@ module.exports = (sequelize, DataTypes) => {
 
         // Asociaciones correspondientes
         PersonaCapacitaciones.belongsTo(models.Persona, {
-            foreignKey: 'persona_id',
+            foreignKey: 'PersonaId',
             as: 'persona'
         });
         PersonaCapacitaciones.belongsTo(models.Capacitacion, {
-            foreignKey: 'capacitacion_id',
+            foreignKey: 'CapacitacionId',
             as: 'capacitacion'
         });
     };

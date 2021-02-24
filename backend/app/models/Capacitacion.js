@@ -17,12 +17,18 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.STRING,
         },
         lat: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING,
         },
         lon: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.STRING,
         },
-        ubicacion: {
+        localidad: {
+            type: Sequelize.STRING,
+        },
+        direccion: {
+            type: Sequelize.STRING,
+        },
+        circuito: {
             type: Sequelize.STRING,
         },
         fechainicio: {
@@ -32,10 +38,10 @@ module.exports = (sequelize, DataTypes) => {
             type: Sequelize.DATE,
         },
         horainicio: {
-            type: Sequelize.DATE,
+            type: Sequelize.TIME,
         },
-        horainicio: {
-            type: Sequelize.DATE,
+        horafin: {
+            type: Sequelize.TIME,
         },
         conectividad_up: {
             type: Sequelize.INTEGER,
