@@ -54,7 +54,7 @@ module.exports = {
         /**
          * @method
          * @description Registrar un nuevo usuario
-         * Primero se deberá buscar si Persona existe.
+         * Primero se deberá buscar si Persona existe (CUIL).
          * Si: Se guarda usuario a esa Persona.
          * No: Se guarda Persona y luego Usuario.
          * ** Previamente se verifica en middleware si
@@ -96,6 +96,9 @@ module.exports = {
                     Usuario: Usuario,
                     token: token
                 });
+
+
+
 
             }).catch(err => {
                 res.status(500).json(err);

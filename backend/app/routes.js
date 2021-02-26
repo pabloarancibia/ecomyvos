@@ -9,10 +9,14 @@ const router = express.Router();
 const verifySignup = require('./middlewares/verifySignup');
 const authJwt = require("./middlewares/authJwt");
 const verifyRol = require("./middlewares/verifyRol");
+const verifyPersona = require("./middlewares/verifyPersona");
+
 
 // Controllers
 const AuthCtrl = require('./controllers/AuthController');
 const capacitacionCtrl = require('./controllers/capacitacionController');
+const rolCtrl = require('./controllers/rolController');
+
 
 
 /**
@@ -38,6 +42,32 @@ router.post(
     [authJwt.verifyToken,
     verifyRol.isAdmin],
     capacitacionCtrl.crearCapacitacion);
+
+// Routes Rol
+router.post(
+    '/api/crearrol',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin],
+    rolCtrl.crearRol
+);
+
+router.post(
+    '/api/asignarrol',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin,
+    verifyRol.isRolExist,
+    verifyPersona.isPersonaExist],
+    rolCtrl.asignarRol
+);
+
+router.post(
+    '/api/retirarrol',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin,
+    verifyRol.isRolExist,
+    verifyPersona.isPersonaExist],
+    rolCtrl.retirarRol
+);
 
 
 module.exports = router;

@@ -27,7 +27,7 @@ const verifyToken = async (req, res, next) => {
 
         next();
     } catch (error) {
-        return res.status(404).json({ message: "No Autorizado" });
+        return res.status(404).json({ message: "No Autorizado (error en token o vencido)" });
     }
 };
 module.exports = { verifyToken };
