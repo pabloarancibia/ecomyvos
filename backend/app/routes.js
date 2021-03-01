@@ -9,7 +9,7 @@ const router = express.Router();
 const verifySignup = require('./middlewares/verifySignup');
 const authJwt = require("./middlewares/authJwt");
 const verifyRol = require("./middlewares/verifyRol");
-const verifyPersona = require("./middlewares/verifyPersona");
+const verifyUsuario = require("./middlewares/verifyUsuario");
 
 
 // Controllers
@@ -64,18 +64,10 @@ router.post(
     [authJwt.verifyToken,
     verifyRol.isAdmin,
     verifyRol.isRolExist,
-    verifyPersona.isPersonaExist],
+    verifyUsuario.isUsuarioExist],
     rolCtrl.asignarRol
 );
 
-router.post(
-    '/api/retirarrol',
-    [authJwt.verifyToken,
-    verifyRol.isAdmin,
-    verifyRol.isRolExist,
-    verifyPersona.isPersonaExist],
-    rolCtrl.retirarRol
-);
 
 
 module.exports = router;

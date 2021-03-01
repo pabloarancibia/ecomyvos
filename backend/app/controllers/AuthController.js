@@ -132,34 +132,26 @@ const UsuarioCtrl = require('./usuarioController');
 //     }
 // }
 
+/**
+//          * @method Registro
+//          * @description
+//          * Buscar o Crear Persona
+//          * Crear Usuario y asignar su Rol
+//          * ** Previamente se verifica en middleware:
+//          * nombre de usuario no exista
+//          * Rol exista
+//          */
 const registro = async (req, res) => {
     const result = await PersonaCtrl.buscarOCrearPersona(req);
 
     let persona = result[0];
     let ustkn = await UsuarioCtrl.crearUsuario(persona, req);
 
-    //Asigno Rol a Persona
-    const rol = Rol.findOne({
-        where: {
-            nombrerol: req.body.nombrerol
-        }
-    }).then(rol => {
-        PersonaRoles.create({
-            PersonaId: persona.id,
-            RolId: rol.id
-        });
-
-        // Respuesta
-
-        res.json({
-            Persona: persona,
-            Usuario: ustkn.Usuario,
-            Rol: rol,
-            token: ustkn.token
-        });
-
-    }).catch(err => {
-        res.status(500).json(err);
+    // Respuesta
+    res.json({
+        Persona: persona,
+        Usuario: ustkn.Usuario,
+        token: ustkn.token
     });
 
 }

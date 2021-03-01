@@ -3,15 +3,21 @@ const { Usuario, Rol } = require('../models/index');
 const isAdmin = async (req, res, next) => {
     try {
         const usuario = await Usuario.findByPk(req.userId);
-        const persona = await usuario.getPersona();
-        const roles = await persona.getRols();
+        const rol = await usuario.getRol();
 
-        for (let i = 0; i < roles.length; i++) {
-            if (roles[i].nombrerol === "admin") {
-                next();
-                return;
-            }
+        // for (let i = 0; i < roles.length; i++) {
+        //     if (roles[i].nombrerol === "admin") {
+        //         next();
+        //         return;
+        //     }
+        // }
+
+        if (rol.nombrerol === "admin") {
+            next();
+            return;
         }
+
+
         return res.status(403).json({ message: "Requiere Rol Admin !" });
     } catch (error) {
         console.log(error)
