@@ -29,12 +29,19 @@ router.get('/', function (req, res) {
 });
 
 // Routes Login & Register
-router.post('/api/signin', AuthCtrl.signIn);
+// router.post('/api/signin', AuthCtrl.signIn);
+// router.post(
+//     '/api/signup',
+//     [verifySignup.checkDuplicateUsername,
+//     verifyRol.isRolExist],
+//     AuthCtrl.signUp
+// );
+
 router.post(
-    '/api/signup',
+    '/api/registro',
     [verifySignup.checkDuplicateUsername,
     verifyRol.isRolExist],
-    AuthCtrl.signUp
+    AuthCtrl.registro
 );
 
 //Routes Capacitacion

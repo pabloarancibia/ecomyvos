@@ -51,11 +51,6 @@ module.exports = (sequelize, DataTypes) => {
     Persona.associate = function (models) {
         // Persona tiene muchos Usuarios 
         Persona.hasMany(models.Usuario);
-        // Persona.hasMany(models.Usuario, {
-        //     as: 'usuario',
-        //     foreignKey: 'persona_id',
-
-        // });
 
         // Persona pertenece a muchos Roles N:M
         Persona.belongsToMany(models.Rol, { through: 'PersonaRoles' });
