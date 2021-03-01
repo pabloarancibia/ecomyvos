@@ -37,8 +37,8 @@ module.exports = (sequelize, DataTypes) => {
 
 
     Rol.associate = function (models) {
-        // Rol pertenece a muchas Personas N:M
-        Rol.belongsToMany(models.Persona, { through: "PersonaRoles" });
+        // Rol tiene muchos Usuarios 
+        Rol.hasMany(models.Usuario);
     };
 
 

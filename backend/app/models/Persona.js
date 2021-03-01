@@ -52,9 +52,6 @@ module.exports = (sequelize, DataTypes) => {
         // Persona tiene muchos Usuarios 
         Persona.hasMany(models.Usuario);
 
-        // Persona pertenece a muchos Roles N:M
-        Persona.belongsToMany(models.Rol, { through: 'PersonaRoles' });
-
         // Persona tiene muchos Telefonos 
         Persona.hasMany(models.Telefono);
 
