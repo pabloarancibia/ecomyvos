@@ -1,4 +1,4 @@
-const { Usuario, Persona } = require('../models/index');
+const { Usuario, Persona, Rol, PersonaRoles } = require('../models/index');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -57,8 +57,9 @@ module.exports = {
          * Primero se deberá buscar si Persona existe (CUIL).
          * Si: Se guarda usuario a esa Persona.
          * No: Se guarda Persona y luego Usuario.
-         * ** Previamente se verifica en middleware si
-         * el nombre de usuario ya existe
+         * ** Previamente se verifica en middleware:
+         * nombre de usuario no exista
+         * Rol exista
          */
 
         // Busco Persona
@@ -75,10 +76,12 @@ module.exports = {
                 fechanacimiento: req.body.fechanacimiento,
             }
         }).then(function (result) {
-            var persona = result[0];
-            // Crear un usuario
+            let persona = result[0];
+
             // Encriptamos la contraseña
             let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
+
+            // Crear un usuario
             Usuario.create({
                 nombreusuario: req.body.nombreusuario,
                 password: password,
@@ -89,15 +92,28 @@ module.exports = {
                 // Creamos el token
                 let token = jwt.sign({ Usuario: Usuario }, authConfig.secret, {
                     expiresIn: authConfig.expires
+                })
+
+                //Asigno Rol a Persona
+                const rol = Rol.findOne({
+                    where: {
+                        nombrerol: req.body.nombrerol
+                    }
+                }).then(rol => {
+                    PersonaRoles.create({
+                        PersonaId: persona.id,
+                        RolId: rol.id
+                    });
+
+                    // Respuesta
+                    res.json({
+                        Usuario: Usuario,
+                        token: token
+                    });
+
+                }).catch(err => {
+                    res.status(500).json(err);
                 });
-
-                // Devolvemos token
-                res.json({
-                    Usuario: Usuario,
-                    token: token
-                });
-
-
 
 
             }).catch(err => {

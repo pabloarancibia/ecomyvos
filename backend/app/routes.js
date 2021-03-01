@@ -32,7 +32,8 @@ router.get('/', function (req, res) {
 router.post('/api/signin', AuthCtrl.signIn);
 router.post(
     '/api/signup',
-    [verifySignup.checkDuplicateUsername],
+    [verifySignup.checkDuplicateUsername,
+    verifyRol.isRolExist],
     AuthCtrl.signUp
 );
 
