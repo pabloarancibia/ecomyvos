@@ -10,12 +10,16 @@ const verifySignup = require('./middlewares/verifySignup');
 const authJwt = require("./middlewares/authJwt");
 const verifyRol = require("./middlewares/verifyRol");
 const verifyUsuario = require("./middlewares/verifyUsuario");
+const verifyPersona = require("./middlewares/verifyPersona");
 
 
 // Controllers
 const AuthCtrl = require('./controllers/AuthController');
 const capacitacionCtrl = require('./controllers/capacitacionController');
 const rolCtrl = require('./controllers/rolController');
+const instructorCtrl = require('./controllers/instructorController');
+const personaCtrl = require('./controllers/personaController');
+const usuarioCtrl = require('./controllers/usuarioController');
 
 
 
@@ -29,20 +33,27 @@ router.get('/', function (req, res) {
 });
 
 // Routes Login & Register
-// router.post('/api/signin', AuthCtrl.signIn);
-// router.post(
-//     '/api/signup',
-//     [verifySignup.checkDuplicateUsername,
-//     verifyRol.isRolExist],
-//     AuthCtrl.signUp
-// );
+router.post('/api/signin', AuthCtrl.signIn);
 
 router.post(
-    '/api/registro',
-    [verifySignup.checkDuplicateUsername,
-    verifyRol.isRolExist],
-    AuthCtrl.registro
+    '/api/registroalumno',
+    [verifySignup.checkDuplicateUsername],
+    AuthCtrl.registroAlumno
 );
+
+//Routes Usuario
+router.get(
+    '/api/usuarios',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin],
+    usuarioCtrl.getUsuarios
+);
+router.get(
+    '/api/usuarios/rol/:nombrerol',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin],
+    usuarioCtrl.getUsuariosByRol
+)
 
 //Routes Capacitacion
 router.post(
@@ -50,6 +61,22 @@ router.post(
     [authJwt.verifyToken,
     verifyRol.isAdmin],
     capacitacionCtrl.crearCapacitacion);
+
+router.put(
+    '/api/modificarcapacitacion/:capacitacionId',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin],
+    capacitacionCtrl.putCapacitacion);
+
+router.get(
+    '/api/capacitaciones',
+    [authJwt.verifyToken],
+    capacitacionCtrl.getCapacitaciones);
+
+router.get(
+    '/api/capacitacion/:capacitacionId',
+    [authJwt.verifyToken],
+    capacitacionCtrl.getCapacitacionById);
 
 // Routes Rol
 router.post(
@@ -68,6 +95,52 @@ router.post(
     rolCtrl.asignarRol
 );
 
+router.put(
+    '/api/modificarrol/:rolId',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin],
+    rolCtrl.putRol);
+
+router.get(
+    '/api/roles',
+    [authJwt.verifyToken, verifyRol.isAdmin],
+    rolCtrl.getRoles);
+
+// Routes Instructor
+router.post(
+    '/api/crearinstructor',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin,
+    verifyPersona.isPersonaNotExist,
+    verifySignup.checkDuplicateUsername],
+    instructorCtrl.crearInstructor
+);
+
+// Routes Persona
+router.put(
+    '/api/modificarpersona/:personaId',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin,
+    verifyPersona.isPersonaIdExist],
+    personaCtrl.putPersona);
+
+router.get(
+    '/api/personas',
+    [authJwt.verifyToken, verifyRol.isAdmin],
+    personaCtrl.getPersonas);
+
+router.get(
+    '/api/persona/:personaId',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin,
+    verifyPersona.isPersonaIdExist],
+    personaCtrl.getPersonaById);
+
+router.get(
+    '/api/personas/rol/:nombrerol',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin],
+    personaCtrl.getPersonasByRol);
 
 
 module.exports = router;

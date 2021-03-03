@@ -1,8 +1,9 @@
 const { Persona } = require("../models/index");
 
-const isPersonaExist = async (req, res, next) => {
+const isPersonaIdExist = async (req, res, next) => {
     try {
-        const { personaId } = req.body;
+        const personaId = req.params.personaId;
+
         const persona = await Persona.findOne({
             where: {
                 id: personaId
@@ -17,7 +18,28 @@ const isPersonaExist = async (req, res, next) => {
 
     } catch (error) {
         console.log(error);
+        res.status(500).json({ message: error, msg: "error en verificación Persona id" });
+    }
+};
+
+const isPersonaNotExist = async (req, res, next) => {
+    try {
+        const { cuil } = req.body;
+        const persona = await Persona.findOne({
+            where: {
+                cuil: cuil
+            }
+        });
+
+        // Persona existe salgo
+        if (persona) return res.status(400).json({ message: "Persona ya existe" });
+
+        // Persona no existe continua
+        next();
+
+    } catch (error) {
+        console.log(error);
         res.status(500).json({ message: error, msg: "error en verificación Persona" });
     }
 };
-module.exports = { isPersonaExist };
+module.exports = { isPersonaIdExist, isPersonaNotExist };

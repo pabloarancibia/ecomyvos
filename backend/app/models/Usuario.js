@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
+      // Usuario pertenece a Persona
+      Usuario.belongsTo(models.Persona)
+
       // Usuario pertenece a Rol
       Usuario.belongsTo(models.Rol)
 

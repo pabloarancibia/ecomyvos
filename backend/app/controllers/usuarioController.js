@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authConfig = require('../../config/auth');
 
-const crearUsuario = async (persona, req) => {
+const crearUsuario = async (personaid, nombrerol, req) => {
 
     // Encriptamos la contraseña
     let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
@@ -11,14 +11,14 @@ const crearUsuario = async (persona, req) => {
     //Busco id Rol
     const rol = await Rol.findOne({
         where: {
-            nombrerol: req.body.nombrerol
+            nombrerol: nombrerol
         }
     });
 
     const nuevoUsuario = await Usuario.create({
         nombreusuario: req.body.nombreusuario,
         password: password,
-        PersonaId: persona.id,
+        PersonaId: personaid,
         RolId: rol.id
     });
 
@@ -36,5 +36,15 @@ const crearUsuario = async (persona, req) => {
     return ustkn;
 
 }
+const getUsuarios = async (req, res) => {
+    const usuarios = await Usuario.findAll();
+    return res.json(usuarios);
+}
 
-module.exports = { crearUsuario };
+const getUsuariosByRol = async (req, res) => {
+    const rol = await Rol.findOne({ where: { nombrerol: req.params.nombrerol } });
+    const usuarios = await rol.getUsuarios();
+    return res.json(usuarios);
+}
+
+module.exports = { crearUsuario, getUsuarios, getUsuariosByRol };

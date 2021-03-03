@@ -1,4 +1,4 @@
-const { Usuario, Persona, Rol, PersonaRoles } = require('../models/index');
+const { Usuario } = require('../models/index');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -9,143 +9,67 @@ const UsuarioCtrl = require('./usuarioController');
 
 // module.exports = {
 
-//     //Login
-//     signIn(req, res) {
-//         let { nombreusuario, password } = req.body;
+/**
+ * @method signIn
+ * @description 
+ * Logueo de usuarios
+ * @returns Datos de usuario y Token
+ */
+const signIn = (req, res) => {
+    let { nombreusuario, password } = req.body;
 
-//         // Buscar usuario
-//         Usuario.findOne({
-//             where: {
-//                 nombreusuario: nombreusuario
-//             }
-//         }).then(Usuario => {
+    // Buscar usuario
+    Usuario.findOne({
+        where: {
+            nombreusuario: nombreusuario
+        }
+    }).then(Usuario => {
 
-//             if (!Usuario) {
-//                 res.status(404).json({ msg: "Usuario no encontrado" });
-//             } else {
+        if (!Usuario) {
+            res.status(404).json({ msg: "Usuario no encontrado" });
+        } else {
 
-//                 // Comparo contraseña
-//                 if (bcrypt.compareSync(password, Usuario.password)) {
+            // Comparo contraseña
+            if (bcrypt.compareSync(password, Usuario.password)) {
 
-//                     // Creamos el token
-//                     let token = jwt.sign({ Usuario: Usuario }, authConfig.secret, {
-//                         expiresIn: authConfig.expires
-//                     });
+                // Creamos el token
+                let token = jwt.sign({ Usuario: Usuario }, authConfig.secret, {
+                    expiresIn: authConfig.expires
+                });
 
-//                     // devuelvo el token
-//                     res.json({
-//                         Usuario: Usuario,
-//                         token: token
-//                     })
+                // devuelvo el token
+                res.json({
+                    Usuario: Usuario,
+                    token: token
+                })
 
-//                 } else {
+            } else {
 
-//                     // Unauthorized Access
-//                     res.status(401).json({ msg: "Contraseña incorrecta" })
-//                 }
+                // Unauthorized Access
+                res.status(401).json({ msg: "Contraseña incorrecta" })
+            }
 
-//             }
+        }
 
-//         }).catch(err => {
-//             res.status(500).json(err);
-//         })
+    }).catch(err => {
+        res.status(500).json(err);
+    })
 
-//     },
-
-//     // Registro
-//     signUp(req, res) {
-//         /**
-//          * @method SignUp
-//          * @description Registrar un nuevo usuario
-//          * Buscar(cuil)/Crear Persona
-//          * Crear Usuario
-//          * Asignar Rol
-//          * ** Previamente se verifica en middleware:
-//          * nombre de usuario no exista
-//          * Rol exista
-//          */
-
-//         // Busco Persona
-//         Persona.findOrCreate({
-//             where: {
-//                 cuil: req.body.cuil
-//             },
-//             defaults: {
-//                 cuil: req.body.cuil,
-//                 nombre: req.body.nombre,
-//                 apellido: req.body.apellido,
-//                 email: req.body.email,
-//                 genero: req.body.genero,
-//                 fechanacimiento: req.body.fechanacimiento,
-//             }
-//         }).then(function (result) {
-//             let persona = result[0];
-
-//             // Encriptamos la contraseña
-//             let password = bcrypt.hashSync(req.body.password, Number.parseInt(authConfig.rounds));
-
-//             // Crear un usuario
-//             Usuario.create({
-//                 nombreusuario: req.body.nombreusuario,
-//                 password: password,
-//                 PersonaId: persona.id
-
-//             }).then(Usuario => {
-
-//                 // Creamos el token
-//                 let token = jwt.sign({ Usuario: Usuario }, authConfig.secret, {
-//                     expiresIn: authConfig.expires
-//                 })
-
-//                 //Asigno Rol a Persona
-//                 const rol = Rol.findOne({
-//                     where: {
-//                         nombrerol: req.body.nombrerol
-//                     }
-//                 }).then(rol => {
-//                     PersonaRoles.create({
-//                         PersonaId: persona.id,
-//                         RolId: rol.id
-//                     });
-
-//                     // Respuesta
-//                     res.json({
-//                         Usuario: Usuario,
-//                         token: token
-//                     });
-
-//                 }).catch(err => {
-//                     res.status(500).json(err);
-//                 });
-
-
-//             }).catch(err => {
-//                 res.status(500).json(err);
-//             });
-
-//         }).catch(err => {
-//             res.status(500).json(err);
-//         });
-
-
-
-//     }
-// }
+}
 
 /**
-//          * @method Registro
-//          * @description
-//          * Buscar o Crear Persona
-//          * Crear Usuario y asignar su Rol
-//          * ** Previamente se verifica en middleware:
-//          * nombre de usuario no exista
-//          * Rol exista
-//          */
-const registro = async (req, res) => {
+ * @method Registro
+ * @description
+* Buscar o Crear Persona
+* Crear Usuario y asignar su Rol Alumno
+* @middlewares nombre de usuario no exista, Rol exista
+* @returns Persona, Usuario, Token
+*/
+const registroAlumno = async (req, res) => {
     const result = await PersonaCtrl.buscarOCrearPersona(req);
 
     let persona = result[0];
-    let ustkn = await UsuarioCtrl.crearUsuario(persona, req);
+    let ustkn = await UsuarioCtrl.crearUsuario(persona.id, 'alumno', req);
 
     // Respuesta
     res.json({
@@ -155,4 +79,4 @@ const registro = async (req, res) => {
     });
 
 }
-module.exports = { registro };
+module.exports = { registroAlumno, signIn };

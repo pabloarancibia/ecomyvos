@@ -53,4 +53,19 @@ const asignarRol = async (req, res) => {
 
 }
 
-module.exports = { crearRol, asignarRol };
+const getRoles = async (req, res) => {
+    const roles = await Rol.findAll();
+    return res.json(roles);
+}
+
+const putRol = async (req, res) => {
+    await Rol.update(req.body, {
+        where: {
+            id: req.params.rolId
+        }
+    });
+
+    return res.json({ success: 'modificacion existosa' });
+}
+
+module.exports = { crearRol, asignarRol, getRoles, putRol };
