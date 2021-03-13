@@ -1,5 +1,8 @@
 const { Persona } = require("../models/index");
 
+/**
+ * verifica mediante personaId que la persona exista
+ */
 const isPersonaIdExist = async (req, res, next) => {
     try {
         const personaId = req.params.personaId;
@@ -22,6 +25,9 @@ const isPersonaIdExist = async (req, res, next) => {
     }
 };
 
+/**
+ * verifica mediante CUIL que la persona no exista
+ */
 const isPersonaNotExist = async (req, res, next) => {
     try {
         const { cuil } = req.body;

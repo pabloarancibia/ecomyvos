@@ -17,7 +17,6 @@ const verifyPersona = require("./middlewares/verifyPersona");
 const AuthCtrl = require('./controllers/AuthController');
 const capacitacionCtrl = require('./controllers/capacitacionController');
 const rolCtrl = require('./controllers/rolController');
-const instructorCtrl = require('./controllers/instructorController');
 const personaCtrl = require('./controllers/personaController');
 const usuarioCtrl = require('./controllers/usuarioController');
 
@@ -37,7 +36,8 @@ router.post('/api/signin', AuthCtrl.signIn);
 
 router.post(
     '/api/registroalumno',
-    [verifySignup.checkDuplicateUsername],
+    [verifySignup.checkDuplicateUsername,
+    verifyPersona.isPersonaNotExist],
     AuthCtrl.registroAlumno
 );
 
@@ -53,7 +53,15 @@ router.get(
     [authJwt.verifyToken,
     verifyRol.isAdmin],
     usuarioCtrl.getUsuariosByRol
-)
+);
+router.post(
+    '/api/nuevousuario',
+    [authJwt.verifyToken,
+    verifySignup.checkDuplicateUsername,
+    verifyRol.isRolExist,
+    verifyRol.isRolPeronaNotExist],
+    usuarioCtrl.nuevoUsuario
+);
 
 //Routes Capacitacion
 router.post(
@@ -106,17 +114,17 @@ router.get(
     [authJwt.verifyToken, verifyRol.isAdmin],
     rolCtrl.getRoles);
 
-// Routes Instructor
+// Routes Persona
 router.post(
-    '/api/crearinstructor',
+    '/api/crearpersonayusuario',
     [authJwt.verifyToken,
     verifyRol.isAdmin,
     verifyPersona.isPersonaNotExist,
-    verifySignup.checkDuplicateUsername],
-    instructorCtrl.crearInstructor
+    verifySignup.checkDuplicateUsername,
+    verifyRol.isRolExist],
+    personaCtrl.crearPersonaYUsuario
 );
 
-// Routes Persona
 router.put(
     '/api/modificarpersona/:personaId',
     [authJwt.verifyToken,

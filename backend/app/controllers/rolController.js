@@ -18,9 +18,14 @@ const crearRol = async (req, res) => {
     }
 }
 
+/**
+ * asignacion de rol - para admin
+ * Previo middleware isAdmin isRolExist isUsuarioExist
+ * @param {*} req usuarioId, nombrerol
+ * @param {*} res 
+ */
 const asignarRol = async (req, res) => {
-    // asignacion de rol - para admin
-    // Previo middleware isAdmin isRolExist isUsuarioExist
+
     const { usuarioId, nombrerol } = req.body;
 
     const rol = await Rol.findOne({ where: { nombrerol: nombrerol } });

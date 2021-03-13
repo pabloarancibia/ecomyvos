@@ -1,5 +1,8 @@
 const { Usuario } = require("../models/index");
 
+/**
+ * verifico que SI exista el usuario
+ */
 const isUsuarioExist = async (req, res, next) => {
     try {
         const { usuarioId } = req.body;
@@ -9,10 +12,10 @@ const isUsuarioExist = async (req, res, next) => {
             }
         });
 
-        // Persona no existe salgo
+        // Usuario no existe salgo
         if (!usuario) return res.status(400).json({ message: "Usuario no existe" });
 
-        // Persona existe continua
+        // Usuario existe continua
         next();
 
     } catch (error) {

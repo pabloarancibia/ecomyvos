@@ -3,6 +3,13 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authConfig = require('../../config/auth');
 
+/**
+ * Crear usuario - uso privado
+ * @param {*} personaid 
+ * @param {*} nombrerol 
+ * @param {*} req nombreusuario
+ * @res json usuario y token
+ */
 const crearUsuario = async (personaid, nombrerol, req) => {
 
     // Encriptamos la contraseña
@@ -47,4 +54,22 @@ const getUsuariosByRol = async (req, res) => {
     return res.json(usuarios);
 }
 
-module.exports = { crearUsuario, getUsuarios, getUsuariosByRol };
+/**
+ * Crear usuario para administradores
+ * @param personaId
+ * @param nombrerol
+ * @param {*} req password
+ * @param {*} res 
+ * @middlewares isAdmin, checkDuplicateUsername, isRolExist, isPersonaRolNotExist
+ */
+const nuevoUsuario = async (req, res) => {
+    try {
+        const nuevousuario = await crearUsuario(req.body.personaId, req.body.nombrerol, req);
+        return res.json(nuevousuario);
+    } catch (error) {
+        return res.json({ message: "error al crear usuario", error })
+    }
+
+}
+
+module.exports = { crearUsuario, getUsuarios, getUsuariosByRol, nuevoUsuario };

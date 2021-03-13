@@ -5,7 +5,7 @@ const { Usuario } = require('../models/index');
 
 
 /**
- * @method Verifico si ya existe nombre de usuario. 
+ * @method Verifico que no exista username. 
  */
 const checkDuplicateUsername = async (req, res, next) => {
     try {

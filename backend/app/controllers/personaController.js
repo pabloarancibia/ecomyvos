@@ -1,4 +1,4 @@
-const { Persona, Rol, Usuario } = require("../models/index");
+const { Persona, Rol } = require("../models/index");
 
 const buscarOCrearPersona = async (req) => {
     const resultado = await Persona.findOrCreate({
@@ -65,7 +65,26 @@ const getPersonasByRol = async (req, res) => {
     return res.json(usuarios);
 }
 
+/**
+ * @description Creacion de Persona y Usuario para administradores
+ * @middlewares isAdmin isPersonaNotExist isUserNotExist isRolExist
+ * @param {*} req - body: datos persona y nombrerol
+ * @returns Persona, Usuario
+ */
+const crearPersonaYUsuario = async (req, res) => {
+    const persona = await PersonaCtrl.crearPersona(req);
+    const nombrerol = req.body.nombrerol;
+
+    let ustkn = await UsuarioCtrl.crearUsuario(persona.id, nombrerol, req);
+
+    // Respuesta
+    res.json({
+        Persona: persona,
+        Usuario: ustkn.Usuario,
+    });
+}
+
 module.exports = {
-    buscarOCrearPersona, crearPersona, putPersona,
-    getPersonas, getPersonaById, getPersonasByRol
+    buscarOCrearPersona, crearPersona, putPersona, crearPersonaYUsuario,
+    getPersonas, getPersonaById, getPersonasByRol,
 };

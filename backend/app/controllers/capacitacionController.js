@@ -1,7 +1,15 @@
 const { Capacitacion } = require("../models/index");
+const { Op } = require("sequelize");
+
 
 const getCapacitaciones = async (req, res) => {
-    const capacitaciones = await Capacitacion.findAll();
+    const capacitaciones = await Capacitacion.findAll({
+        where: {
+            estado: {
+                [Op.notLike]: '%eliminado'
+            }
+        }
+    });
     return res.json(capacitaciones);
 }
 
