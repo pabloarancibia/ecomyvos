@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('certificado', {
+    await queryInterface.createTable('Certificado', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -41,7 +41,7 @@ module.exports = {
 
   down: async (queryInterface, Sequelize) => {
 
-    await queryInterface.dropTable('certificado');
+    await queryInterface.dropTable('Certificado');
 
   }
 };

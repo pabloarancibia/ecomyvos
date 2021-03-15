@@ -56,7 +56,8 @@ router.get(
 );
 router.post(
     '/api/nuevousuario',
-    [authJwt.verifyToken,
+    [
+    authJwt.verifyToken,
     verifySignup.checkDuplicateUsername,
     verifyRol.isRolExist,
     verifyRol.isRolPeronaNotExist],
