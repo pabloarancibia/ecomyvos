@@ -36,7 +36,8 @@ router.post('/api/signin', AuthCtrl.signIn);
 
 router.post(
     '/api/registroalumno',
-    [verifySignup.checkDuplicateUsername,
+    [verifyRol.isRolExist,
+    verifySignup.checkDuplicateUsername,
     verifyPersona.isPersonaNotExist],
     AuthCtrl.registroAlumno
 );
@@ -63,6 +64,18 @@ router.post(
     verifyRol.isRolPeronaNotExist],
     usuarioCtrl.nuevoUsuario
 );
+router.get(
+    '/api/usperrol',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin],
+    usuarioCtrl.getUsPerRol
+);
+router.put(
+    '/api/modificarusuario',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin,
+    verifyUsuario.isUsuarioExist],
+    usuarioCtrl.putUsuario);
 
 //Routes Capacitacion
 router.post(

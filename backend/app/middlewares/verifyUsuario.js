@@ -20,7 +20,7 @@ const isUsuarioExist = async (req, res, next) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: error, msg: "error en verificación Usuario" });
+        res.status(500).json({ message: error, message: "error en verificación Usuario" });
     }
 };
 module.exports = { isUsuarioExist };

@@ -18,7 +18,7 @@ const isAdmin = async (req, res, next) => {
         return res.status(403).json({ message: "Requiere Rol Admin !" });
     } catch (error) {
         console.log(error)
-        return res.status(500).send({ message: error, msg: "error verificando admin" });
+        return res.status(500).send({ message: error, message: "error verificando admin" });
     }
 };
 
@@ -43,7 +43,7 @@ const isRolExist = async (req, res, next) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: error, msg: "error en middleware rol" });
+        res.status(500).json({ message: error, message: "error en middleware rol" });
     }
 }
 
@@ -74,7 +74,7 @@ const isRolPeronaNotExist = async (req, res, next) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: error, msg: "error en middleware persona rol" });
+        res.status(500).json({ message: error, message: "error en middleware persona rol" });
     }
 }
 

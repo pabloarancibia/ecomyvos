@@ -31,7 +31,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         len: {
           args: [4, 30],
-          msg: "El nombre de Usuario debe ser entre 4 y 30 caracteres"
+          message: "El nombre de Usuario debe ser entre 4 y 30 caracteres"
         }
       }
     },
@@ -48,6 +48,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.DATE
     },
+    estado: {
+      type: DataTypes.STRING,
+      defaultValue: "activo"
+
+  },
 
   }, {
     sequelize,

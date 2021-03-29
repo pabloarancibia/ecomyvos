@@ -22,7 +22,7 @@ const crearRol = async (req, res) => {
  * asignacion de rol - para admin
  * Previo middleware isAdmin isRolExist isUsuarioExist
  * @param {*} req usuarioId, nombrerol
- * @param {*} res 
+ * @param {*} res Usuario
  */
 const asignarRol = async (req, res) => {
 

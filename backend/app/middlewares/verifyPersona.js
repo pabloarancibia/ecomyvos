@@ -21,7 +21,7 @@ const isPersonaIdExist = async (req, res, next) => {
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: error, msg: "error en verificación Persona id" });
+        res.status(500).json({ message: error, message: "error en verificación Persona id" });
     }
 };
 
@@ -38,14 +38,14 @@ const isPersonaNotExist = async (req, res, next) => {
         });
 
         // Persona existe salgo
-        if (persona) return res.status(400).json({ message: "Persona ya existe" });
+        if (persona) return res.status(400).json({ message: "Cuil ya existe" });
 
         // Persona no existe continua
         next();
 
     } catch (error) {
         console.log(error);
-        res.status(500).json({ message: error, msg: "error en verificación Persona" });
+        res.status(500).json({ message: error, message: "error en verificación Persona" });
     }
 };
 module.exports = { isPersonaIdExist, isPersonaNotExist };

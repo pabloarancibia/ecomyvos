@@ -25,7 +25,7 @@ const checkDuplicateUsername = async (req, res, next) => {
         // Si !usuario continuo
         next();
     } catch (error) {
-        res.status(500).json({ message: error, msg: "error en middleware signup" });
+        res.status(500).json({ message: error, message: "error en middleware signup" });
     }
 
 };

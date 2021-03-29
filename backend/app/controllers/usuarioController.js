@@ -1,7 +1,9 @@
-const { Usuario, Rol } = require("../models/index");
+const { Usuario, Rol, Persona } = require("../models/index");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authConfig = require('../../config/auth');
+const { Op } = require("sequelize");
+
 
 /**
  * Crear usuario - uso privado
@@ -44,7 +46,13 @@ const crearUsuario = async (personaid, nombrerol, req) => {
 
 }
 const getUsuarios = async (req, res) => {
-    const usuarios = await Usuario.findAll();
+    const usuarios = await Usuario.findAll({
+        where: {
+            estado: {
+                [Op.notLike]: '%eliminado'
+            }
+        }
+    });
     return res.json(usuarios);
 }
 
@@ -72,4 +80,51 @@ const nuevoUsuario = async (req, res) => {
 
 }
 
-module.exports = { crearUsuario, getUsuarios, getUsuariosByRol, nuevoUsuario };
+/**
+ *  Obtener Usuarios con persona y rol
+ * @param {*} res 
+ * @returns Usuarios con persona y rol
+ * @middleware isAdmin
+ */
+const getUsPerRol = async (req, res) => {
+    try {
+        const query = await Usuario.findAll({
+            where: {
+                estado: {
+                    [Op.notLike]: '%eliminado'
+                }
+            },
+            include:[
+                {model:Persona},
+                {model:Rol}
+            ]
+        });
+        return res.json(query);
+    } catch (error) {
+        return res.json({ message: "error al obtener datos de usuario", error })
+        
+    }
+}
+
+/**
+ * Modificar Usuario
+ * @param {*} req body: usuarioID
+ * @param {*} res Usuario
+ * @returns Usuario
+ * @middleware isAdmin, isRolExist, isUserExist
+ */
+const putUsuario = async (req, res) => {
+    try {
+        await Usuario.update(req.body, {
+            where: {
+                id: req.body.usuarioId
+            }
+        });
+        return res.json({ success: 'Modificación correcta' });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json(error);
+    }
+}
+
+module.exports = { crearUsuario, getUsuarios, getUsuariosByRol, nuevoUsuario, getUsPerRol, putUsuario };

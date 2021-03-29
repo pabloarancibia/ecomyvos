@@ -26,7 +26,7 @@ const signIn = (req, res) => {
     }).then(Usuario => {
 
         if (!Usuario) {
-            res.status(404).json({ msg: "Usuario no encontrado" });
+            res.status(404).json({ message: "Usuario no encontrado" });
         } else {
 
             // Comparo contraseña
@@ -46,7 +46,7 @@ const signIn = (req, res) => {
             } else {
 
                 // Unauthorized Access
-                res.status(401).json({ msg: "Contraseña incorrecta" })
+                res.status(401).json({ message: "Contraseña incorrecta" })
             }
 
         }
@@ -66,17 +66,21 @@ const signIn = (req, res) => {
 * @returns Persona, Usuario, Token
 */
 const registroAlumno = async (req, res) => {
-    const result = await PersonaCtrl.buscarOCrearPersona(req);
-
-    let persona = result[0];
-    let ustkn = await UsuarioCtrl.crearUsuario(persona.id, 'alumno', req);
-
-    // Respuesta
-    res.json({
-        Persona: persona,
-        Usuario: ustkn.Usuario,
-        token: ustkn.token
-    });
+    try {
+        const result = await PersonaCtrl.buscarOCrearPersona(req);
+        let persona = result[0];
+        let ustkn = await UsuarioCtrl.crearUsuario(persona.id, 'alumno', req);
+        // Respuesta
+        res.json({
+            Persona: persona,
+            Usuario: ustkn.Usuario,
+            token: ustkn.token
+        });
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500), json(error);    
+    }
 
 }
 module.exports = { registroAlumno, signIn };
