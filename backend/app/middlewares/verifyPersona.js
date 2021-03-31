@@ -1,23 +1,26 @@
 const { Persona } = require("../models/index");
 
 /**
+ * Recibe personaId en params
  * verifica mediante personaId que la persona exista
+ * 
  */
 const isPersonaIdExist = async (req, res, next) => {
     try {
-        const personaId = req.params.personaId;
+            const personaId = req.params.personaId;
 
-        const persona = await Persona.findOne({
-            where: {
-                id: personaId
-            }
-        });
+            const persona = await Persona.findOne({
+                where: {
+                    id: personaId
+                }
+            });
 
-        // Persona no existe salgo
-        if (!persona) return res.status(400).json({ message: "Persona no existe" });
 
-        // Persona existe continua
-        next();
+            // Persona no existe salgo
+            if (!persona) return res.status(400).json({ message: "Persona no existe" });
+
+            // Persona existe continua
+            next();
 
     } catch (error) {
         console.log(error);

@@ -24,7 +24,6 @@ const isAdmin = async (req, res, next) => {
 
 /**
  * Recibe nombrerol del body y verifica que exista
- * para crear rol, asignar rol, etc.
  */
 const isRolExist = async (req, res, next) => {
     try {

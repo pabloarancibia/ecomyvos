@@ -1,4 +1,4 @@
-const { Usuario, Rol, Persona } = require("../models/index");
+const { Usuario, Rol, Persona, Capacitacion } = require("../models/index");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authConfig = require('../../config/auth');
@@ -107,6 +107,77 @@ const getUsPerRol = async (req, res) => {
 }
 
 /**
+ * Obtener Usuarios con su Rol, Persona y Caps.
+ * @param {*} req 
+ * @param {*} res 
+ * todos los Usuarios->Personas->Roles-Caps relacionados
+ * @returns  
+ */
+ const getUsPerRolCap = async (req, res) => {
+    try {
+        const query = await Usuario.findAll({
+            where: {
+                estado: {
+                    [Op.notLike]: '%eliminado'
+                }
+            },
+            include:[
+                {
+                    model:Persona,
+                        include: [{
+                            model: Capacitacion,
+                        }]     
+                },
+                {model:Rol}
+            ]
+        });
+        return res.json(query);
+    } catch (error) {
+        return res.json({ message: "error al obtener datos", error })
+        
+    }
+}
+
+/**
+ * Obtener Usuarios Persona y Caps segun su Rol.
+ * @param {*} req body: nombrerol
+ * @param {*} res 
+ * @returns todos los Usuarios->Personas->Caps relacionados
+ * segun su Rol
+ */
+ const getUsPerCapByRol = async (req, res) => {
+    try {
+        const {nombrerol} = req.params;
+        const rol = await Rol.findOne({ where: { nombrerol: nombrerol } });
+        const query = await Usuario.findAll({
+            where: {
+                estado: {
+                    [Op.notLike]: '%eliminado'
+                }
+            },
+            include:[
+                {
+                    model:Persona,
+                        include: [{
+                            model: Capacitacion,
+                        }]     
+                },
+                {
+                    model:Rol,
+                    where: {
+                        id: rol.id
+                    }
+                }
+            ]
+        });
+        return res.json(query);
+    } catch (error) {
+        return res.json({ message: "error al obtener datos", error })
+        
+    }
+}
+
+/**
  * Modificar Usuario
  * @param {*} req body: usuarioID
  * @param {*} res Usuario
@@ -127,4 +198,6 @@ const putUsuario = async (req, res) => {
     }
 }
 
-module.exports = { crearUsuario, getUsuarios, getUsuariosByRol, nuevoUsuario, getUsPerRol, putUsuario };
+module.exports = { crearUsuario, getUsuarios, 
+    getUsuariosByRol, nuevoUsuario, getUsPerRol, 
+    putUsuario, getUsPerRolCap,getUsPerCapByRol };

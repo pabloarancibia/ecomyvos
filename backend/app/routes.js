@@ -70,6 +70,18 @@ router.get(
     verifyRol.isAdmin],
     usuarioCtrl.getUsPerRol
 );
+router.get(
+    '/api/usperrolcap',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin],
+    usuarioCtrl.getUsPerRolCap);
+
+router.get(
+    '/api/uspercapbyrol/:nombrerol',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin],
+    usuarioCtrl.getUsPerCapByRol);
+    
 router.put(
     '/api/modificarusuario',
     [authJwt.verifyToken,
@@ -99,6 +111,9 @@ router.get(
     '/api/capacitacion/:capacitacionId',
     [authJwt.verifyToken],
     capacitacionCtrl.getCapacitacionById);
+
+
+
 
 // Routes Rol
 router.post(
@@ -163,6 +178,13 @@ router.get(
     [authJwt.verifyToken,
     verifyRol.isAdmin],
     personaCtrl.getPersonasByRol);
+
+router.post(
+    '/api/asignarcapacitacion',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin],
+    personaCtrl.asignarCapacitacion
+);
 
 
 module.exports = router;

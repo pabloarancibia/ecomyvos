@@ -60,4 +60,6 @@ const crearCapacitacion = async (req, res) => {
     }
 }
 
+
+
 module.exports = { crearCapacitacion, getCapacitaciones, putCapacitacion, getCapacitacionById };

@@ -1,4 +1,5 @@
-const { Persona, Rol } = require("../models/index");
+const { Persona, Rol, Usuario,
+    PersonaCapacitaciones,Capacitacion } = require("../models/index");
 
 const buscarOCrearPersona = async (req) => {
     const resultado = await Persona.findOrCreate({
@@ -84,7 +85,44 @@ const crearPersonaYUsuario = async (req, res) => {
     });
 }
 
+/**
+ * Asigno capacitacion a Persona
+ * @param {*} req body personaId, capacitacionId
+ * @param {*} res success o error message
+ */
+const asignarCapacitacion = async (req, res) =>{
+    const {personaId, capacitacionId} = req.body;
+    Persona.findOne(
+        {
+            where:{id:personaId}
+        }).then(persona=>{
+            Capacitacion.findOne(
+                {
+                    where:{id:capacitacionId}
+                }).then(capacitacion=>{
+                    if (!persona || !capacitacion){
+                        res.status(500).json({message:'error en asignacion'}
+                    )};
+
+                    // ok
+                    persona.setCapacitacions(capacitacion);
+                    res.json("asignacion Ok")
+
+                }).catch(err=>{
+                    res.status(500).json({message:'Error en asignacion',err});
+                });
+            
+        }).catch(err=>{
+            res.status(500).json({message:'Error en asignacion',err});
+        });
+}
+
+
+
+
+
 module.exports = {
-    buscarOCrearPersona, crearPersona, putPersona, crearPersonaYUsuario,
-    getPersonas, getPersonaById, getPersonasByRol,
+    buscarOCrearPersona, crearPersona, putPersona, 
+    crearPersonaYUsuario, getPersonas, getPersonaById, 
+    getPersonasByRol, asignarCapacitacion
 };
