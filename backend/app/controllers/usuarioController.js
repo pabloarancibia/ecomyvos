@@ -1,4 +1,4 @@
-const { Usuario, Rol, Persona, Capacitacion } = require("../models/index");
+const { Usuario, Rol, Persona, Capacitacion, UsuarioCapacitaciones } = require("../models/index");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authConfig = require('../../config/auth');
@@ -122,13 +122,9 @@ const getUsPerRol = async (req, res) => {
                 }
             },
             include:[
-                {
-                    model:Persona,
-                        include: [{
-                            model: Capacitacion,
-                        }]     
-                },
-                {model:Rol}
+                {model:Persona},
+                {model:Rol},
+                {model:Capacitacion}
             ]
         });
         return res.json(query);
@@ -156,18 +152,15 @@ const getUsPerRol = async (req, res) => {
                 }
             },
             include:[
-                {
-                    model:Persona,
-                        include: [{
-                            model: Capacitacion,
-                        }]     
-                },
+                {model:Persona},
+                {model: Capacitacion},
                 {
                     model:Rol,
                     where: {
                         id: rol.id
                     }
                 }
+
             ]
         });
         return res.json(query);
@@ -198,6 +191,79 @@ const putUsuario = async (req, res) => {
     }
 }
 
+/**
+ * Asigno capacitacion a Usuario
+ * @param {*} req body usuarioId, capacitacionId
+ * @param {*} res success o error message
+ */
+ const asignarCapacitacion = async (req, res) =>{
+    const {usuarioId, capacitacionId} = req.body;
+    Usuario.findOne(
+        {
+            where:{id:usuarioId}
+        }).then(usuario=>{
+            Capacitacion.findOne(
+                {
+                    where:{id:capacitacionId}
+                }).then(capacitacion=>{
+                    if (!usuario || !capacitacion){
+                        res.status(500).json({message:'error en asignacion'}
+                    )};
+
+                    // ok
+                    usuario.setCapacitacions(capacitacion);
+                    return res.json({ success: 'Asignación correcta' });
+
+
+                }).catch(err=>{
+                    res.status(500).json({message:'Error en asignacion',err});
+                });
+            
+        }).catch(err=>{
+            res.status(500).json({message:'Error en asignacion',err});
+        });
+}
+
+/**
+ * Quitar capacitacion a Usuario
+ * @param {*} req body usuarioId, capacitacionId
+ * @param {*} res success o error message
+ */
+ const quitarCapAUs = async (req, res) =>{
+    const {usuarioId, capacitacionId} = req.body;
+    Usuario.findOne(
+        {
+            where:{id:usuarioId}
+        }).then(usuario=>{
+            Capacitacion.findOne(
+                {
+                    where:{id:capacitacionId}
+                }).then(capacitacion=>{
+                    if (!usuario || !capacitacion){
+                        res.status(500).json({message:'error en eliminacion'}
+                    )};
+
+                    // ok
+                    UsuarioCapacitaciones.destroy({
+                        where: {
+                            UsuarioId: usuario.id,
+                            CapacitacionId: capacitacion.id
+                        }
+                    })
+                    
+                    return res.json({ success: 'Eliminación correcta' });
+
+
+                }).catch(err=>{
+                    res.status(500).json({message:'Error en eliminacion',err});
+                });
+            
+        }).catch(err=>{
+            res.status(500).json({message:'Error en eliminacion',err});
+        });
+}
+
 module.exports = { crearUsuario, getUsuarios, 
     getUsuariosByRol, nuevoUsuario, getUsPerRol, 
-    putUsuario, getUsPerRolCap,getUsPerCapByRol };
+    putUsuario, getUsPerRolCap,getUsPerCapByRol,
+    asignarCapacitacion, quitarCapAUs };

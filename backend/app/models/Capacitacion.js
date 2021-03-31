@@ -73,8 +73,8 @@ module.exports = (sequelize, DataTypes) => {
 
 
     Capacitacion.associate = function (models) {
-        // Capacitacion pertenece a muchas Personas N:M
-        Capacitacion.belongsToMany(models.Persona, { through: "PersonaCapacitaciones" });
+        // Capacitacion pertenece a muchas Usuarios N:M
+        Capacitacion.belongsToMany(models.Usuario, { through: "UsuarioCapacitaciones" });
 
         // Capacitacion tiene muchas Asistencias 
         Capacitacion.hasMany(models.Asistencia);

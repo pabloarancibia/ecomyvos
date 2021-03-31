@@ -89,6 +89,20 @@ router.put(
     verifyUsuario.isUsuarioExist],
     usuarioCtrl.putUsuario);
 
+router.post(
+    '/api/asignarcapacitacion',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin],
+    usuarioCtrl.asignarCapacitacion
+);
+
+router.post(
+    '/api/quitarcapaus',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin],
+    usuarioCtrl.quitarCapAUs
+);
+
 //Routes Capacitacion
 router.post(
     '/api/crearcapacitacion',
@@ -179,12 +193,7 @@ router.get(
     verifyRol.isAdmin],
     personaCtrl.getPersonasByRol);
 
-router.post(
-    '/api/asignarcapacitacion',
-    [authJwt.verifyToken,
-    verifyRol.isAdmin],
-    personaCtrl.asignarCapacitacion
-);
+
 
 
 module.exports = router;

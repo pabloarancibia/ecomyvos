@@ -55,14 +55,7 @@ module.exports = (sequelize, DataTypes) => {
         // Persona tiene muchos Telefonos 
         Persona.hasMany(models.Telefono);
 
-        // Persona pertenece a muchas Capacitaciones N:M
-        Persona.belongsToMany(models.Capacitacion, { through: 'PersonaCapacitaciones' });
-
-        // Persona tiene muchas Asistencias 
-        Persona.hasMany(models.Asistencia);
-
-        // Persona tiene muchos Certificados 
-        Persona.hasMany(models.Certificado);
+        
     };
     return Persona;
 };

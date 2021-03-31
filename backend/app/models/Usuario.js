@@ -15,6 +15,15 @@ module.exports = (sequelize, DataTypes) => {
       // Usuario pertenece a Rol
       Usuario.belongsTo(models.Rol)
 
+      // Usuario pertenece a muchas Capacitaciones N:M
+      Usuario.belongsToMany(models.Capacitacion, { through: 'UsuarioCapacitaciones' });
+
+      // Usuario tiene muchas Asistencias 
+      Usuario.hasMany(models.Asistencia);
+
+      // Usuario tiene muchos Certificados 
+      Usuario.hasMany(models.Certificado);
+
     }
   };
   Usuario.init({

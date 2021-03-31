@@ -32,8 +32,8 @@ module.exports = (sequelize, DataTypes) => {
 
 
     Asistencia.associate = function (models) {
-        // Asistencia pertenece a Persona
-        Asistencia.belongsTo(models.Persona)
+        // Asistencia pertenece a Usuario
+        Asistencia.belongsTo(models.Usuario)
         // Asistencia pertenece a Capacitacion
         Asistencia.belongsTo(models.Capacitacion)
 
