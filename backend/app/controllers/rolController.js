@@ -63,6 +63,28 @@ const getRoles = async (req, res) => {
     return res.json(roles);
 }
 
+/**
+ * Traer rol de un usuario específico
+ * @param {*} req body usuarioId
+ * @param {*} res 
+ * @returns 
+ */
+const getRol = async (req, res) => {
+    const {usuarioId} = req.body;
+    
+    const usuario = await Usuario.findOne({
+        where: {
+            id: usuarioId
+        },
+        include:[
+            {model:Rol}
+        ]
+    });
+    const nombrerol = usuario.Rol.nombrerol;
+    // const nombrerol = rol.nombrerol;
+    return res.json({nombrerol});
+}
+
 const putRol = async (req, res) => {
     await Rol.update(req.body, {
         where: {
@@ -73,4 +95,5 @@ const putRol = async (req, res) => {
     return res.json({ success: 'modificacion existosa' });
 }
 
-module.exports = { crearRol, asignarRol, getRoles, putRol };
+module.exports = { crearRol, asignarRol, 
+    getRoles, putRol, getRol };

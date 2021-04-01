@@ -157,6 +157,12 @@ router.get(
     [authJwt.verifyToken, verifyRol.isAdmin],
     rolCtrl.getRoles);
 
+router.get(
+    '/api/getrol',
+    [authJwt.verifyToken, 
+    verifyUsuario.isUsuarioExist],
+    rolCtrl.getRol);
+
 // Routes Persona
 router.post(
     '/api/crearpersonayusuario',
