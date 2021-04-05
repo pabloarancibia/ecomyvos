@@ -79,7 +79,7 @@ router.get(
 router.get(
     '/api/uspercapbyrol/:nombrerol',
     [authJwt.verifyToken,
-    verifyRol.isAdmin],
+    verifyRol.isAdminOrInstructor],
     usuarioCtrl.getUsPerCapByRol);
     
 router.put(
@@ -92,14 +92,14 @@ router.put(
 router.post(
     '/api/asignarcapacitacion',
     [authJwt.verifyToken,
-    verifyRol.isAdmin],
+    verifyRol.isAdminOrInstructor],
     usuarioCtrl.asignarCapacitacion
 );
 
 router.post(
     '/api/quitarcapaus',
     [authJwt.verifyToken,
-    verifyRol.isAdmin],
+    verifyRol.isAdminOrInstructor],
     usuarioCtrl.quitarCapAUs
 );
 
@@ -107,13 +107,13 @@ router.post(
 router.post(
     '/api/crearcapacitacion',
     [authJwt.verifyToken,
-    verifyRol.isAdmin],
+    verifyRol.isAdminOrInstructor],
     capacitacionCtrl.crearCapacitacion);
 
 router.put(
     '/api/modificarcapacitacion/:capacitacionId',
     [authJwt.verifyToken,
-    verifyRol.isAdmin],
+    verifyRol.isAdminOrInstructor],
     capacitacionCtrl.putCapacitacion);
 
 router.get(
@@ -159,7 +159,7 @@ router.get(
 
 router.get(
     '/api/getrol',
-    [authJwt.verifyToken, 
+    [authJwt.verifyToken,
     verifyUsuario.isUsuarioExist],
     rolCtrl.getRol);
 

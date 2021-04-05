@@ -1,4 +1,4 @@
-const { Usuario } = require('../models/index');
+const { Usuario, Rol } = require('../models/index');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -22,7 +22,10 @@ const signIn = (req, res) => {
     Usuario.findOne({
         where: {
             nombreusuario: nombreusuario
-        }
+        },
+        include:[{
+            model:Rol
+        }]
     }).then(Usuario => {
 
         if (!Usuario) {
@@ -37,7 +40,7 @@ const signIn = (req, res) => {
                     expiresIn: authConfig.expires
                 });
 
-                // devuelvo el token
+                // devuelvo datos de usuario
                 res.json({
                     Usuario: Usuario,
                     token: token

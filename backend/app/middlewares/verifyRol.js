@@ -23,6 +23,28 @@ const isAdmin = async (req, res, next) => {
 };
 
 /**
+ * Verifico si el usuario logueado tiene rol admin o instructor
+ * userId es previamente almacenado cuando verifica el token
+ * este middle SIEMPRE tiene que ir DESPUES de verifyToken
+ */
+ const isAdminOrInstructor = async (req, res, next) => {
+    try {
+        const usuario = await Usuario.findByPk(req.userId);
+        const rol = await usuario.getRol();
+
+        if (rol.nombrerol === "admin" || rol.nombrerol ==="instructor") {
+            next();
+            return;
+        }
+
+        return res.status(403).json({ message: "Rol inválido !" });
+    } catch (error) {
+        console.log(error)
+        return res.status(500).send({ message: error, message: "error verificando admin" });
+    }
+};
+
+/**
  * Recibe nombrerol del body y verifica que exista
  */
 const isRolExist = async (req, res, next) => {
@@ -77,4 +99,4 @@ const isRolPeronaNotExist = async (req, res, next) => {
     }
 }
 
-module.exports = { isAdmin, isRolExist, isRolPeronaNotExist };
+module.exports = { isAdmin, isRolExist, isRolPeronaNotExist,isAdminOrInstructor };
