@@ -102,6 +102,23 @@ router.post(
     verifyRol.isAdminOrInstructor],
     usuarioCtrl.quitarCapAUs
 );
+router.post(
+    '/api/inscripcionAlumno',
+    [authJwt.verifyToken],
+    usuarioCtrl.inscripcionAlumno
+);
+
+router.post(
+    '/api/quitarInscripcion',
+    [authJwt.verifyToken],
+    usuarioCtrl.quitarInscripcion
+);
+
+router.get(
+    '/api/traerCapacitacionesUsuario',
+    [authJwt.verifyToken],
+    usuarioCtrl.capsUsRegistrado
+);
 
 //Routes Capacitacion
 router.post(
@@ -125,6 +142,8 @@ router.get(
     '/api/capacitacion/:capacitacionId',
     [authJwt.verifyToken],
     capacitacionCtrl.getCapacitacionById);
+
+
 
 
 

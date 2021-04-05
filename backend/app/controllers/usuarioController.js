@@ -263,7 +263,107 @@ const putUsuario = async (req, res) => {
         });
 }
 
+/**
+ * Inscripcion para Alumno registrado.
+ * saco el userId del token
+ * @param {*} req capacitacionId
+ * @param {*} res success o error message
+ */
+ const inscripcionAlumno = async (req, res) =>{
+    const usuarioId = req.userId;
+    const {capacitacionId} = req.body;
+
+    Usuario.findOne(
+        {
+            where:{id:usuarioId}
+        }).then(usuario=>{
+            Capacitacion.findOne(
+                {
+                    where:{id:capacitacionId}
+                }).then(capacitacion=>{
+                    if (!usuario || !capacitacion){
+                        res.status(500).json({message:'error en asignacion'}
+                    )};
+
+                    // ok
+                    usuario.setCapacitacions(capacitacion);
+                    return res.json({ success: 'Asignación correcta' });
+
+
+                }).catch(err=>{
+                    res.status(500).json({message:'Error en asignacion',err});
+                });
+            
+        }).catch(err=>{
+            res.status(500).json({message:'Error en asignacion',err});
+        });
+}
+
+/**
+ * Quitar inscripcion a Usuario Registrado
+ * saco userId del header token
+ * @param {*} req capacitacionId
+ * @param {*} res success o error message
+ */
+ const quitarInscripcion = async (req, res) =>{
+    const usuarioId = req.userId;
+    const {capacitacionId} = req.body;
+    Usuario.findOne(
+        {
+            where:{id:usuarioId}
+        }).then(usuario=>{
+            Capacitacion.findOne(
+                {
+                    where:{id:capacitacionId}
+                }).then(capacitacion=>{
+                    if (!usuario || !capacitacion){
+                        res.status(500).json({message:'error en eliminacion'}
+                    )};
+
+                    // ok
+                    UsuarioCapacitaciones.destroy({
+                        where: {
+                            UsuarioId: usuario.id,
+                            CapacitacionId: capacitacion.id
+                        }
+                    })
+                    
+                    return res.json({ success: 'Eliminación correcta' });
+
+
+                }).catch(err=>{
+                    res.status(500).json({message:'Error en eliminacion',err});
+                });
+            
+        }).catch(err=>{
+            res.status(500).json({message:'Error en eliminacion',err});
+        });
+}
+
+/**
+ * Traer capacitaciones de usuario registrado
+ */
+const capsUsRegistrado = async (req, res) => {
+    const usuarioId = req.userId;
+    Usuario.findOne(
+        {
+            where:{id:usuarioId},
+            include: [
+                {model:Capacitacion}
+            ]
+        }).then(usuario=>{
+            if (!usuario) {
+                res.status(404).json({ message: "Usuario no encontrado" });
+            } else {
+                return res.json({Capacitaciones: usuario.Capacitacions});
+            }    
+        }).catch(err=>{
+            res.status(500).json({message:'Error buscando datos de usuario',err});
+        });
+}
+
 module.exports = { crearUsuario, getUsuarios, 
     getUsuariosByRol, nuevoUsuario, getUsPerRol, 
     putUsuario, getUsPerRolCap,getUsPerCapByRol,
-    asignarCapacitacion, quitarCapAUs };
+    asignarCapacitacion, quitarCapAUs, inscripcionAlumno,
+    quitarInscripcion,capsUsRegistrado };
