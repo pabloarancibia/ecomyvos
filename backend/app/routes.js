@@ -109,7 +109,7 @@ router.post(
 );
 
 router.post(
-    '/api/quitarInscripcion',
+    '/api/quitarinscripcion',
     [authJwt.verifyToken],
     usuarioCtrl.quitarInscripcion
 );

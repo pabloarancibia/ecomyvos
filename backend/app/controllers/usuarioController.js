@@ -211,7 +211,7 @@ const putUsuario = async (req, res) => {
                     )};
 
                     // ok
-                    usuario.setCapacitacions(capacitacion);
+                    usuario.addCapacitacion(capacitacion);
                     return res.json({ success: 'Asignación correcta' });
 
 
@@ -280,13 +280,14 @@ const putUsuario = async (req, res) => {
             Capacitacion.findOne(
                 {
                     where:{id:capacitacionId}
-                }).then(capacitacion=>{
+
+                }).then(async capacitacion=>{
                     if (!usuario || !capacitacion){
                         res.status(500).json({message:'error en asignacion'}
                     )};
 
                     // ok
-                    usuario.setCapacitacions(capacitacion);
+                    await usuario.addCapacitacion(capacitacion);
                     return res.json({ success: 'Asignación correcta' });
 
 
