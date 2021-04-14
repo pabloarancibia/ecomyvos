@@ -36,6 +36,8 @@ module.exports = (sequelize, DataTypes) => {
         Asistencia.belongsTo(models.Usuario)
         // Asistencia pertenece a Capacitacion
         Asistencia.belongsTo(models.Capacitacion)
+        // Asistencia pertenece a Clase
+        // Asistencia.belongsTo(models.Clase)
 
 
     };

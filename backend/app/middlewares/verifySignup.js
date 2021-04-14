@@ -16,7 +16,9 @@ const checkDuplicateUsername = async (req, res, next) => {
         const usuario = await Usuario.findOne({
             where: {
                 nombreusuario: nombreusuario
-            }
+            },
+            attributes: {exclude: ['password']},
+
         });
 
         // si existe usuario res 400

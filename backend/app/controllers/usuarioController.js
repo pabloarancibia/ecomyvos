@@ -51,7 +51,8 @@ const getUsuarios = async (req, res) => {
             estado: {
                 [Op.notLike]: '%eliminado'
             }
-        }
+        },
+        attributes: {exclude: ['password']}
     });
     return res.json(usuarios);
 }
@@ -94,6 +95,7 @@ const getUsPerRol = async (req, res) => {
                     [Op.notLike]: '%eliminado'
                 }
             },
+            attributes: {exclude: ['password']},
             include:[
                 {model:Persona},
                 {model:Rol}
@@ -121,6 +123,7 @@ const getUsPerRol = async (req, res) => {
                     [Op.notLike]: '%eliminado'
                 }
             },
+            attributes: {exclude: ['password']},
             include:[
                 {model:Persona},
                 {model:Rol},
@@ -151,6 +154,8 @@ const getUsPerRol = async (req, res) => {
                     [Op.notLike]: '%eliminado'
                 }
             },
+            attributes: {exclude: ['password']},
+
             include:[
                 {model:Persona},
                 {model: Capacitacion},
@@ -200,7 +205,9 @@ const putUsuario = async (req, res) => {
     const {usuarioId, capacitacionId} = req.body;
     Usuario.findOne(
         {
-            where:{id:usuarioId}
+            where:{id:usuarioId},
+            attributes: {exclude: ['password']},
+
         }).then(usuario=>{
             Capacitacion.findOne(
                 {
@@ -233,7 +240,9 @@ const putUsuario = async (req, res) => {
     const {usuarioId, capacitacionId} = req.body;
     Usuario.findOne(
         {
-            where:{id:usuarioId}
+            where:{id:usuarioId},
+            attributes: {exclude: ['password']},
+
         }).then(usuario=>{
             Capacitacion.findOne(
                 {
@@ -275,11 +284,14 @@ const putUsuario = async (req, res) => {
 
     Usuario.findOne(
         {
-            where:{id:usuarioId}
+            where:{id:usuarioId},
+            attributes: {exclude: ['password']},
+
         }).then(usuario=>{
             Capacitacion.findOne(
                 {
                     where:{id:capacitacionId}
+
 
                 }).then(async capacitacion=>{
                     if (!usuario || !capacitacion){
@@ -311,7 +323,9 @@ const putUsuario = async (req, res) => {
     const {capacitacionId} = req.body;
     Usuario.findOne(
         {
-            where:{id:usuarioId}
+            where:{id:usuarioId},
+            attributes: {exclude: ['password']},
+
         }).then(usuario=>{
             Capacitacion.findOne(
                 {
@@ -349,6 +363,7 @@ const capsUsRegistrado = async (req, res) => {
     Usuario.findOne(
         {
             where:{id:usuarioId},
+            attributes: {exclude: ['password']},
             include: [
                 {model:Capacitacion}
             ]

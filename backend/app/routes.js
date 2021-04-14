@@ -133,6 +133,12 @@ router.put(
     verifyRol.isAdminOrInstructor],
     capacitacionCtrl.putCapacitacion);
 
+router.delete(
+    '/api/eliminarcapacitacion/:capacitacionId',
+    [authJwt.verifyToken,
+    verifyRol.isAdminOrInstructor],
+    capacitacionCtrl.deleteCapacitacion);
+
 router.get(
     '/api/capacitaciones',
     [authJwt.verifyToken],

@@ -36,6 +36,26 @@ const putCapacitacion = async (req, res) => {
     }
 }
 
+/**
+ * Elimina completamente la capacitacion
+ * @param {*} req capacitacionId
+ * @param {*} res msg
+ * @returns 
+ */
+const deleteCapacitacion = async (req, res) => {
+    try {
+        await Capacitacion.destroy({
+            where: {
+                id: req.params.capacitacionId
+            }
+        });
+        return res.json({ success: 'Eliminación correcta',message:'Eliminación correcta' });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json(error);
+    }
+}
+
 const crearCapacitacion = async (req, res) => {
     const { nombre, convenio, lat, lon, localidad, direccion, circuito, fechainicio,
         fechafin, horainicio, horafin, conectividad_up, conectividad_down,
@@ -62,4 +82,5 @@ const crearCapacitacion = async (req, res) => {
 
 
 
-module.exports = { crearCapacitacion, getCapacitaciones, putCapacitacion, getCapacitacionById };
+module.exports = { crearCapacitacion, getCapacitaciones, 
+    putCapacitacion, getCapacitacionById,deleteCapacitacion };

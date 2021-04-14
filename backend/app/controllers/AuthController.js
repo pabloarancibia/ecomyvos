@@ -13,7 +13,7 @@ const UsuarioCtrl = require('./usuarioController');
  * @method signIn
  * @description 
  * Logueo de usuarios
- * @returns Datos de usuario y Token
+ * @returns nombreusuario, nombrerol y Token
  */
 const signIn = (req, res) => {
     let { nombreusuario, password } = req.body;
@@ -24,7 +24,9 @@ const signIn = (req, res) => {
             nombreusuario: nombreusuario
         },
         include:[{
-            model:Rol
+            model:Rol,
+            attributes: ['nombrerol']
+
         }]
     }).then(Usuario => {
 
@@ -40,9 +42,18 @@ const signIn = (req, res) => {
                     expiresIn: authConfig.expires
                 });
 
-                // devuelvo datos de usuario
+                
+                // Preparo los datos a devolver
+                let UserObj = {
+                    nombreusuario: Usuario.nombreusuario,
+                    Rol: {
+                        nombrerol: Usuario.Rol.nombrerol
+                    }
+                };
+
+                // devuelvo datos 
                 res.json({
-                    Usuario: Usuario,
+                    Usuario: UserObj,
                     token: token
                 })
 
@@ -73,11 +84,19 @@ const registroAlumno = async (req, res) => {
         const result = await PersonaCtrl.buscarOCrearPersona(req);
         let persona = result[0];
         let ustkn = await UsuarioCtrl.crearUsuario(persona.id, 'alumno', req);
+        
+        // Preparo los datos a devolver
+        // let UserObj = {
+        //     nombreusuario: ustkn.Usuario.nombreusuario,
+            
+        // };
         // Respuesta
         res.json({
-            Persona: persona,
-            Usuario: ustkn.Usuario,
-            token: ustkn.token
+            success: 'Registro Ok',
+            message: 'Registro creado correctamente'
+            
+            // Usuario: UserObj,
+            // token: ustkn.token
         });
         
     } catch (error) {

@@ -35,7 +35,9 @@ const asignarRol = async (req, res) => {
             where: {
                 id: usuarioId,
                 RolId: rol.id
-            }
+            },
+            attributes: {exclude: ['password']},
+
         });
         if (usuariorol) return res.status(400).json({ message: "Usuario ya tiene este Rol" });
 
@@ -76,6 +78,8 @@ const getRol = async (req, res) => {
         where: {
             id: usuarioId
         },
+        attributes: {exclude: ['password']},
+
         include:[
             {model:Rol}
         ]
