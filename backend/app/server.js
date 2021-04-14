@@ -7,7 +7,7 @@ const cors = require('cors');
 const { sequelize } = require('./models/index')
 
 //settings 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT;
 
 // Implementamos de que origen vamos a permitir que nos hagan request
 const corsOption = { origin: '*', optionSucessStatus: 200 };
