@@ -79,6 +79,9 @@ module.exports = (sequelize, DataTypes) => {
         // Capacitacion tiene muchas Asistencias 
         Capacitacion.hasMany(models.Asistencia);
 
+        // Capacitacion tiene muchas Clases 
+        Capacitacion.hasMany(models.Clase);
+
         // Capacitacion tiene muchos Certificados 
         Capacitacion.hasMany(models.Certificado);
     };

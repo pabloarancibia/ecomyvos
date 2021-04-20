@@ -19,6 +19,7 @@ const capacitacionCtrl = require('./controllers/capacitacionController');
 const rolCtrl = require('./controllers/rolController');
 const personaCtrl = require('./controllers/personaController');
 const usuarioCtrl = require('./controllers/usuarioController');
+const claseCtrl = require('./controllers/claseController');
 
 
 
@@ -224,7 +225,45 @@ router.get(
     verifyRol.isAdmin],
     personaCtrl.getPersonasByRol);
 
+// Routes Clase
+router.post(
+    '/api/crearclase',
+    [authJwt.verifyToken,
+    verifyRol.isAdminOrInstructor,
+    ],
+    claseCtrl.crearClase
+);
+router.put(
+    '/api/modificarclase/:claseid',
+    [authJwt.verifyToken,
+    verifyRol.isAdminOrInstructor,
+    ],
+    claseCtrl.putClase
+);
+router.delete(
+    '/api/eliminarclase/:claseid',
+    [authJwt.verifyToken,
+    verifyRol.isAdminOrInstructor,
+    ],
+    claseCtrl.deleteClase
+);
+router.get(
+    '/api/clases',
+    [authJwt.verifyToken,
+    verifyRol.isAdminOrInstructor,
+    ],
+    claseCtrl.getClases
+);
+router.get(
+    '/api/clasesporcapacitacion',
+    [authJwt.verifyToken,
+    verifyRol.isAdminOrInstructor,
+    ],
+    claseCtrl.getClasesByCapId
+);
 
+
+// Routes Asistencia
 
 
 module.exports = router;
