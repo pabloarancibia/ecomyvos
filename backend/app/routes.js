@@ -20,6 +20,7 @@ const rolCtrl = require('./controllers/rolController');
 const personaCtrl = require('./controllers/personaController');
 const usuarioCtrl = require('./controllers/usuarioController');
 const claseCtrl = require('./controllers/claseController');
+const asistenciaCtrl = require('./controllers/asistenciaController');
 
 
 
@@ -262,6 +263,14 @@ router.get(
     claseCtrl.getClasesByCapId
 );
 
+// Alumnos
+router.get(
+    '/api/alumnosclases/:capacitacionId',
+    [authJwt.verifyToken,
+    verifyRol.isAdminOrInstructor,
+    ],
+    asistenciaCtrl.getAlumnosClasesByCap
+);
 
 // Routes Asistencia
 

@@ -1,4 +1,4 @@
-const { Usuario, Rol, Persona, Capacitacion, UsuarioCapacitaciones } = require("../models/index");
+const { Usuario, Rol, Persona, Capacitacion, UsuarioCapacitaciones, Clase } = require("../models/index");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authConfig = require('../../config/auth');
@@ -57,11 +57,17 @@ const getUsuarios = async (req, res) => {
     return res.json(usuarios);
 }
 
+/**
+ * Traer usuarios segun rol
+ * @param nombrerol
+ */
 const getUsuariosByRol = async (req, res) => {
     const rol = await Rol.findOne({ where: { nombrerol: req.params.nombrerol } });
     const usuarios = await rol.getUsuarios();
     return res.json(usuarios);
 }
+
+
 
 /**
  * Crear usuario para administradores
