@@ -21,7 +21,9 @@ const { Op } = require("sequelize");
             where: { 
                 id: req.params.capacitacionId 
             },
-            attributes: ['nombre'],
+            attributes: ['nombre','convenio','direccion','fechainicio','fechafin',
+            'horainicio','horafin'],
+            
             include: [{
                 model: Usuario,
                 where:{
@@ -30,7 +32,7 @@ const { Op } = require("sequelize");
                         [Op.notLike]: '%eliminado'
                     }
                 },
-                attributes: ['nombreusuario','RolId'],
+                attributes: ['id','nombreusuario','RolId'],
                 include: [{
                     model: Persona,
                     attributes: ['nombre', 'apellido']
@@ -45,37 +47,6 @@ const { Op } = require("sequelize");
             }
             ] 
         });
-         
-        // const alumnos = await Usuario.findAll({
-        //     where:{
-        //         RolId:rol.id,
-        //         estado: {
-        //             [Op.notLike]: '%eliminado'
-        //         }
-        //     },
-        //     include:[{
-        //         model: Capacitacion,
-        //             where: {
-        //                 id: req.params.capacitacionId
-        //             },
-        //             attributes: ['nombre']
-        //     },
-        //     {
-        //         model:Persona,
-        //         attributes: ['nombre', 'apellido']
-        //     }
-        //     ],
-        //     attributes: {exclude: ['password']},
-        // });
-
-        // const clases = await Clase.findAll({
-        //     where: {
-        //         CapacitacionId: req.params.capacitacionId
-        //     },
-        //     include:[
-        //         {model: Asistencia}
-        //     ]
-        // });
 
         return res.json({cap});
         
@@ -86,4 +57,29 @@ const { Op } = require("sequelize");
     
 }
 
-module.exports = {getAlumnosClasesByCap}
+/**
+ * Crear una asistencia para un usuario
+ * @param {*} req valores para el registro en body
+ * @param {*} res json asistencia
+ */
+const crearAsistencia = async (req, res) => {
+    const {asistencia, observaciones, capacitacionId, usuarioId, claseId} = req.body;
+    try {
+        const asis = await Asistencia.create({
+            asistencia: asistencia,
+            observaciones: observaciones,
+            CapacitacionId: capacitacionId,
+            UsuarioId: usuarioId,
+            ClaseId: claseId
+        })
+
+        res.status(201).json(asis);
+
+        
+    } catch (error) {
+        console.log(error);
+        return res.status(500), json(error);
+    }
+}
+
+module.exports = {getAlumnosClasesByCap, crearAsistencia}

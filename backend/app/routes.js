@@ -273,6 +273,12 @@ router.get(
 );
 
 // Routes Asistencia
-
+router.post(
+    '/api/crearasistencia',
+    [authJwt.verifyToken,
+    verifyRol.isAdminOrInstructor,
+    ],
+    asistenciaCtrl.crearAsistencia
+);
 
 module.exports = router;
