@@ -21,7 +21,7 @@ const { Op } = require("sequelize");
             where: { 
                 id: req.params.capacitacionId 
             },
-            attributes: ['nombre','convenio','direccion','fechainicio','fechafin',
+            attributes: ['id','nombre','convenio','direccion','fechainicio','fechafin',
             'horainicio','horafin'],
             
             include: [{
