@@ -1,4 +1,4 @@
-const { Capacitacion } = require("../models/index");
+const { Capacitacion, Clase, Asistencia } = require("../models/index");
 const { Op } = require("sequelize");
 
 
@@ -9,6 +9,32 @@ const getCapacitaciones = async (req, res) => {
                 [Op.notLike]: '%eliminado'
             }
         }
+    });
+    return res.json(capacitaciones);
+}
+
+
+/**
+ * Traigo capacitacione, clases y asistencias 
+ */
+const getCapsClasesAsis = async (req, res) => {
+    const capacitaciones = await Capacitacion.findAll({
+        // attributes: ['nombre'],
+        where: {
+            estado: {
+                [Op.notLike]: '%eliminado'
+            }
+        },
+        include:[{
+            model: Clase,
+            include:[{
+                model: Asistencia,
+                
+            },
+            // [sequelize.fn('COUNT', sequelize.col('id')), 'asistencias']
+            ]
+            
+        }]
     });
     return res.json(capacitaciones);
 }
@@ -80,7 +106,23 @@ const crearCapacitacion = async (req, res) => {
     }
 }
 
+/**
+ * Traer nombre, fechas y hrs de capacitaciones
+ */
+const getCapacitacionesFechas = async (req, res) => {
+    const capacitaciones = await Capacitacion.findAll({
+        where: {
+            estado: {
+                [Op.notLike]: '%eliminado'
+            }
+        },
+        attributes:['id','nombre', 'fechainicio','fechafin', 'horainicio', 'horafin']
+    });
+    return res.json(capacitaciones);
+}
+
 
 
 module.exports = { crearCapacitacion, getCapacitaciones, 
-    putCapacitacion, getCapacitacionById,deleteCapacitacion };
+    putCapacitacion, getCapacitacionById,deleteCapacitacion,
+    getCapsClasesAsis, getCapacitacionesFechas };

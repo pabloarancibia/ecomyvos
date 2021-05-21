@@ -3,6 +3,8 @@ const { Asistencia, Rol,
     Usuario, Persona } = require('../models/index');
 
 const { Op } = require("sequelize");
+const Sequelize = require('sequelize')
+
 
 
 /**
@@ -58,23 +60,39 @@ const { Op } = require("sequelize");
 }
 
 /**
- * Crear una asistencia para un usuario
+ * Crear una asistencia para un usuario. Actualizar si existe.
  * @param {*} req valores para el registro en body
  * @param {*} res json asistencia
  */
 const crearAsistencia = async (req, res) => {
     const {asistencia, observaciones, capacitacionId, usuarioId, claseId} = req.body;
     try {
-        const asis = await Asistencia.create({
-            asistencia: asistencia,
-            observaciones: observaciones,
-            CapacitacionId: capacitacionId,
-            UsuarioId: usuarioId,
-            ClaseId: claseId
+
+        const asis = await Asistencia.findOne({
+            where: {
+                CapacitacionId: capacitacionId,
+                UsuarioId: usuarioId,
+                ClaseId: claseId
+            }
+        }).then(function(obj){
+            //update
+            if (obj){
+                return obj.update({
+                    asistencia: asistencia,
+                    observaciones: observaciones
+                })
+            };
+
+            //insert
+            return Asistencia.create({
+                asistencia: asistencia,
+                observaciones: observaciones,
+                CapacitacionId: capacitacionId,
+                UsuarioId: usuarioId,
+                ClaseId: claseId
+            });
         })
-
         res.status(201).json(asis);
-
         
     } catch (error) {
         console.log(error);
@@ -82,4 +100,23 @@ const crearAsistencia = async (req, res) => {
     }
 }
 
-module.exports = {getAlumnosClasesByCap, crearAsistencia}
+
+/**
+ * Cantidad de Asistencias agrupadas por Capacitacion
+ */
+const getPresentes = async (req, res) => {
+    const asistencias = await Asistencia.findAll({
+        attributes: [
+            'capacitacionId',
+            [Sequelize.literal('COUNT(DISTINCT(id))'), 'asistencias']
+          ],
+        where: {
+            asistencia: 'presente'
+        },
+        group: 'capacitacionId',
+
+    });
+    return res.json(asistencias);
+}
+
+module.exports = {getAlumnosClasesByCap, crearAsistencia,getPresentes}

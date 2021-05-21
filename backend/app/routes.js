@@ -147,11 +147,21 @@ router.get(
     capacitacionCtrl.getCapacitaciones);
 
 router.get(
+    '/api/capclasesasis',
+    [authJwt.verifyToken,
+    verifyRol.isAdminOrInstructor],
+    capacitacionCtrl.getCapsClasesAsis);
+
+router.get(
     '/api/capacitacion/:capacitacionId',
     [authJwt.verifyToken],
     capacitacionCtrl.getCapacitacionById);
 
-
+router.get(
+    '/api/capacitacionesfechas',
+    [authJwt.verifyToken,
+    verifyRol.isAdminOrInstructor],
+    capacitacionCtrl.getCapacitacionesFechas);
 
 
 
@@ -256,6 +266,13 @@ router.get(
     claseCtrl.getClases
 );
 router.get(
+    '/api/clasesasistencias',
+    [authJwt.verifyToken,
+    verifyRol.isAdminOrInstructor,
+    ],
+    claseCtrl.getClasesAsistencias
+);
+router.get(
     '/api/clasesporcapacitacion',
     [authJwt.verifyToken,
     verifyRol.isAdminOrInstructor,
@@ -279,6 +296,13 @@ router.post(
     verifyRol.isAdminOrInstructor,
     ],
     asistenciaCtrl.crearAsistencia
+);
+router.get(
+    '/api/presentes',
+    [authJwt.verifyToken,
+    verifyRol.isAdminOrInstructor,
+    ],
+    asistenciaCtrl.getPresentes
 );
 
 module.exports = router;

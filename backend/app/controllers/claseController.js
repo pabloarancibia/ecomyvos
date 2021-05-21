@@ -1,4 +1,4 @@
-const { Clase } = require("../models/index");
+const { Clase, Asistencia } = require("../models/index");
 
 /**
  * Crear una nueva clase
@@ -57,6 +57,19 @@ const getClases = async (req, res) => {
 }
 
 /**
+ * Traer todas las clases y sus asistencias
+ * @param {*}  
+ * @returns json clases
+ */
+ const getClasesAsistencias = async (req, res) => {
+    
+    const clases = await Clase.findAll({
+        include:[{model: Asistencia}]
+    });
+    return res.json(clases);
+}
+
+/**
  * Traer clases segun capacitacionId
  * @param {*} req body capacitacionId
  * @param {*} res json clases
@@ -99,4 +112,4 @@ const deleteClase = async (req, res) => {
 }
 
 module.exports = {crearClase, putClase, 
-    getClases,deleteClase,getClasesByCapId}
+    getClases,deleteClase,getClasesByCapId,getClasesAsistencias}
