@@ -273,7 +273,7 @@ router.get(
     claseCtrl.getClasesAsistencias
 );
 router.get(
-    '/api/clasesporcapacitacion',
+    '/api/clases/:capacitacionid',
     [authJwt.verifyToken,
     verifyRol.isAdminOrInstructor,
     ],

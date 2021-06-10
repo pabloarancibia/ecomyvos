@@ -25,7 +25,7 @@ const crearClase = async (req, res) => {
 
 /**
  * Modificar clase
- * @param {*} req params claseId
+ * @param {*} req params claseid
  * @param {*} res 
  * @returns 
  */
@@ -79,7 +79,7 @@ const getClasesByCapId = async (req, res) => {
     try {
         const clases = await Clase.findAll({
             where: {
-                CapacitacionId: req.body.capacitacionId
+                CapacitacionId: req.params.capacitacionid
             }
         });
         return res.json(clases);
