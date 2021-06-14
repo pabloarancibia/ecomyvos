@@ -54,15 +54,16 @@ const getPersonaById = async (req, res) => {
     return res.json(persona);
 }
 
+
 const getPersonasByRol = async (req, res) => {
-    const rol = await Rol.findOne({ where: { nombrerol: req.params.nombrerol } });
-    const usuarios = await rol.getUsuarios();
+    // const rol = await Rol.findOne({ where: { nombrerol: req.params.nombrerol } });
+    // const usuarios = await rol.getUsuarios();
     // const personas = await Persona.findAll({
     //     where: {
-    //         id: usuarios.PersonaId
+    //         id: usuarios.PersonaId,
     //     }
     // })
-    return res.json(usuarios);
+    // return res.json(usuarios);
 }
 
 /**

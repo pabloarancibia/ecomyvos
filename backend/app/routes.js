@@ -72,6 +72,14 @@ router.get(
     verifyRol.isAdmin],
     usuarioCtrl.getUsPerRol
 );
+
+router.get(
+    '/api/usperrolcount',
+    [authJwt.verifyToken,
+    verifyRol.isAdmin],
+    usuarioCtrl.getUsPerRolCount
+);
+
 router.get(
     '/api/usperrolcap',
     [authJwt.verifyToken,

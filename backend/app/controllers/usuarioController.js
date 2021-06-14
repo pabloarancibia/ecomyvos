@@ -2,7 +2,7 @@ const { Usuario, Rol, Persona, Capacitacion, UsuarioCapacitaciones, Clase } = re
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const authConfig = require('../../config/auth');
-const { Op } = require("sequelize");
+const { Op, Sequelize } = require("sequelize");
 
 
 /**
@@ -106,6 +106,44 @@ const getUsPerRol = async (req, res) => {
                 {model:Persona},
                 {model:Rol}
             ]
+        });
+        return res.json(query);
+    } catch (error) {
+        return res.json({ message: "error al obtener datos de usuario", error })
+        
+    }
+}
+
+
+/**
+ * 
+ * traigo cantidad de personas por género 
+ * con rol alumno
+ */
+const getUsPerRolCount = async (req, res) => {
+    try {
+        const query = await Persona.findAll({
+            attributes: ['genero',
+                [Sequelize.fn('COUNT', Sequelize.col('genero')), 'count']
+            ],
+            group: 'genero',
+            raw: true,
+            logging: true,
+            include:[
+                {
+                    model:Usuario,
+                    attributes: [],
+                    required: true,
+                include:[
+                    {model:Rol,
+                        required: true,
+                        where: {
+                            nombrerol: 'alumno'
+                        },
+                        attributes: [],
+                    }
+                ]
+            }]
         });
         return res.json(query);
     } catch (error) {
@@ -388,4 +426,4 @@ module.exports = { crearUsuario, getUsuarios,
     getUsuariosByRol, nuevoUsuario, getUsPerRol, 
     putUsuario, getUsPerRolCap,getUsPerCapByRol,
     asignarCapacitacion, quitarCapAUs, inscripcionAlumno,
-    quitarInscripcion,capsUsRegistrado };
+    quitarInscripcion,capsUsRegistrado, getUsPerRolCount };
