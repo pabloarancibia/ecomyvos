@@ -116,11 +116,9 @@ const getUsPerRol = async (req, res) => {
 
 
 /**
- * 
- * traigo cantidad de personas por género 
- * con rol alumno
+ * traigo cantidad de alumnos por género 
  */
-const getUsPerRolCount = async (req, res) => {
+const getCantAlumnosGenero = async (req, res) => {
     try {
         const query = await Persona.findAll({
             attributes: ['genero',
@@ -426,4 +424,4 @@ module.exports = { crearUsuario, getUsuarios,
     getUsuariosByRol, nuevoUsuario, getUsPerRol, 
     putUsuario, getUsPerRolCap,getUsPerCapByRol,
     asignarCapacitacion, quitarCapAUs, inscripcionAlumno,
-    quitarInscripcion,capsUsRegistrado, getUsPerRolCount };
+    quitarInscripcion,capsUsRegistrado, getCantAlumnosGenero };

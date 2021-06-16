@@ -11,6 +11,8 @@ const authJwt = require("./middlewares/authJwt");
 const verifyRol = require("./middlewares/verifyRol");
 const verifyUsuario = require("./middlewares/verifyUsuario");
 const verifyPersona = require("./middlewares/verifyPersona");
+const verifyTema = require("./middlewares/verifyTema");
+
 
 
 // Controllers
@@ -21,6 +23,7 @@ const personaCtrl = require('./controllers/personaController');
 const usuarioCtrl = require('./controllers/usuarioController');
 const claseCtrl = require('./controllers/claseController');
 const asistenciaCtrl = require('./controllers/asistenciaController');
+const temaCtrl = require('./controllers/temaController');
 
 
 
@@ -74,10 +77,10 @@ router.get(
 );
 
 router.get(
-    '/api/usperrolcount',
+    '/api/cantalumnosgenero',
     [authJwt.verifyToken,
     verifyRol.isAdmin],
-    usuarioCtrl.getUsPerRolCount
+    usuarioCtrl.getCantAlumnosGenero
 );
 
 router.get(
@@ -312,5 +315,44 @@ router.get(
     ],
     asistenciaCtrl.getPresentes
 );
+
+// TEMAS
+router.get(
+    '/api/temas',
+    [
+        authJwt.verifyToken,
+        
+    ],
+    temaCtrl.getTemas
+);
+
+router.put(
+    '/api/editartema/:temaId',
+    [
+        authJwt.verifyToken,
+        verifyRol.isAdminOrInstructor,
+    ],
+    temaCtrl.putTema
+);
+
+router.post(
+    '/api/creartema',
+    [
+        authJwt.verifyToken,
+        verifyRol.isAdminOrInstructor,
+        verifyTema.isTemaNotExist
+    ],
+    temaCtrl.crearTema
+);
+
+router.post(
+    '/api/asignartemacapacitacion',
+    [
+        authJwt.verifyToken,
+        verifyRol.isAdminOrInstructor,
+    ],
+    temaCtrl.asignarTemaCapacitacion
+);
+
 
 module.exports = router;

@@ -84,6 +84,10 @@ module.exports = (sequelize, DataTypes) => {
 
         // Capacitacion tiene muchos Certificados 
         Capacitacion.hasMany(models.Certificado);
+
+        // Capacitacion pertenece/tiene a muchos temas N:M
+        Capacitacion.belongsToMany(models.Tema, { through: "TemaCapacitaciones" });
+
     };
 
 
