@@ -326,11 +326,50 @@ router.get(
     temaCtrl.getTemas
 );
 
+router.get(
+    '/api/temascap/:capacitacionId',
+    [
+        authJwt.verifyToken,
+        verifyRol.isAdminOrInstructor,
+    ],
+    temaCtrl.getTemasByCap
+);
+
+router.get(
+    '/api/capstema/:temaId',
+    [
+        authJwt.verifyToken,
+        verifyRol.isAdminOrInstructor,
+        verifyTema.isTemaExist
+    ],
+    temaCtrl.getCapsByTema
+);
+
+router.get(
+    '/api/countcapstema/:temaId',
+    [
+        authJwt.verifyToken,
+        verifyRol.isAdminOrInstructor,
+        verifyTema.isTemaExist
+    ],
+    temaCtrl.countCapsByTema
+);
+
+router.get(
+    '/api/capstemas',
+    [
+        authJwt.verifyToken,
+        verifyRol.isAdminOrInstructor,
+    ],
+    temaCtrl.getTemasCapsCount
+);
+
 router.put(
     '/api/editartema/:temaId',
     [
         authJwt.verifyToken,
         verifyRol.isAdminOrInstructor,
+        verifyTema.isTemaExist
     ],
     temaCtrl.putTema
 );

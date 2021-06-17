@@ -29,5 +29,30 @@ const isTemaNotExist = async (req, res, next) => {
         res.status(500).json({ message: error, message: "error en verificación Tema" });
     }
 };
+/**
+ * Verifico que tema SI exista
+ * segun param temaId
+ */
+ const isTemaExist = async (req, res, next) => {
+    try {
+            const temaId = req.params.temaId;
 
-module.exports = { isTemaNotExist };
+            const tema = await Tema.findOne({
+                where: {
+                    id: temaId
+                }
+            });
+
+            // Tema NO existe salgo
+            if (!tema) return res.status(400).json({ message: "Tema no existe" });
+
+            // Tema SI existe continua
+            next();
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: error, message: "error en verificación Tema" });
+    }
+};
+
+module.exports = { isTemaNotExist, isTemaExist };
