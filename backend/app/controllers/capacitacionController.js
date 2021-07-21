@@ -1,5 +1,6 @@
-const { Capacitacion, Clase, Asistencia } = require("../models/index");
+const { Capacitacion, Clase, Asistencia, Tema } = require("../models/index");
 const { Op } = require("sequelize");
+const { nuevoUsuario } = require("./usuarioController");
 
 
 const getCapacitaciones = async (req, res) => {
@@ -89,19 +90,47 @@ const crearCapacitacion = async (req, res) => {
 
     try {
 
-        const nuevaCapacitacion = await Capacitacion.create({
+        await Capacitacion.create({
             nombre, convenio, lat, lon, localidad, direccion, circuito, fechainicio,
             fechafin, horainicio, horafin, conectividad_up, conectividad_down,
             observaciones
+        }).then(Capacitacion=>{
+            const {temasFrmCtrl} = req.body;
+            console.log(temasFrmCtrl);
+            temasFrmCtrl.map(tema=>{
+                Tema.findOrCreate({
+                    where: {
+                        nombre: tema
+                    },
+                    defaults: {
+                        nombre: tema,
+                        descripcion: tema
+                    }
+                }).then(temaFoC=>{
+                    const temaAsignar = temaFoC && temaFoC[0] ? temaFoC[0] : null;
+                    temaAsignar.addCapacitacion(Capacitacion);
+                    res.status(201).json(Capacitacion);
+                }).catch(err=>{
+                    console.error('error en asignar tema a capacitacion')
+                    res.status(500).json({err:err, message:'error en servidor al asignar temas'});
+                });
+                // if (created){
+                //     temaAsignar.addCapacitacion(Capacitacion);
+                //     res.status(201).json(Capacitacion);
+                // }
+            })
+        }).catch(err=>{
+            console.error('error en map tema', err)
+            res.status(500).json(err);
         })
 
         // const capacitacionGuardada = await nuevaCapacitacion.save();
 
-        res.status(201).json(nuevaCapacitacion);
+        
 
     } catch (error) {
 
-        console.log(error);
+        console.error('error en crear capacitacion',error);
         return res.status(500).json(error);
     }
 }
